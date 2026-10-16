@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portal Perisai Diri</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Library Text Editor (Quill.js) -->
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
 </head>
@@ -24,7 +23,6 @@
     <div class="container mx-auto p-4 mt-6 max-w-5xl">
         <div id="alert-box" class="hidden mb-6 p-3 rounded font-bold text-white text-center shadow-lg"></div>
 
-        <!-- Bagian Auth -->
         <div id="auth-section" class="max-w-md mx-auto bg-white p-8 rounded-xl shadow-lg border-t-4 border-red-600 mb-10">
             <h2 class="text-2xl font-bold mb-6 text-center">Portal Anggota</h2>
             <input type="email" id="email" placeholder="Alamat Email" class="w-full p-3 mb-3 border rounded bg-gray-50">
@@ -35,11 +33,9 @@
             </div>
         </div>
 
-        <!-- Dashboard Admin -->
         <div id="dashboard-section" class="hidden mb-10">
             <div class="bg-white p-8 rounded-xl shadow-md border-l-4 border-red-600">
                 <h2 class="text-2xl font-bold mb-4">Tulis Berita Baru</h2>
-                
                 <input type="hidden" id="edit-id" value="">
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
@@ -61,7 +57,6 @@
                     </div>
                 </div>
 
-                <!-- Rich Text Editor -->
                 <div class="mb-4 bg-white">
                     <div id="editor-container" class="h-48 rounded-b"></div>
                 </div>
@@ -73,26 +68,28 @@
             </div>
         </div>
 
-        <!-- Daftar Berita -->
         <h2 class="text-2xl font-bold mb-6 border-l-4 border-black pl-3">Portal Informasi</h2>
         <div id="berita-container" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
     </div>
 
-    <!-- Firebase Script -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, collection, addDoc, getDocs, updateDoc, doc, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
         // ==========================================
-        // PASTE FIREBASE CONFIG ANDA DI SINI
+        // 1. MASUKKAN API KEY IMGBB DI SINI
+        // ==========================================
+        const IMGBB_API_KEY = "ecee7bbedc9bf7d2541dfb76f8e8087d";
+
+        // ==========================================
+        // 2. MASUKKAN FIREBASE CONFIG ANDA DI SINI
+        // (Tidak perlu storageBucket lagi)
         // ==========================================
         const firebaseConfig = {
             apiKey: "AIzaSyC7vHRm7AhY8fNdvClgDOCl4jevVFMAujY",
             authDomain: "perisai-diri-cabang-bojonegoro.firebaseapp.com",
             projectId: "perisai-diri-cabang-bojonegoro",
-            storageBucket: "perisai-diri-cabang-bojonegoro.firebasestorage.app", // PASTIKAN INI ADA UNTUK FOTO
             messagingSenderId: "66914647335",
             appId: "1:66914647335:web:fba82b00a83a52b9bcfd02"
         };
@@ -100,9 +97,7 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
-        const storage = getStorage(app);
 
-        // Inisialisasi Editor Text
         const quill = new Quill('#editor-container', {
             theme: 'snow',
             placeholder: 'Tulis isi berita atau pengumuman di sini...'
@@ -110,7 +105,6 @@
 
         let currentUser = null;
 
-        // Tampilan UI
         function showAlert(msg, isSuccess = true) {
             const box = document.getElementById('alert-box');
             box.textContent = msg;
@@ -131,7 +125,7 @@
                 document.getElementById('btn-show-login').classList.remove('hidden');
                 document.getElementById('btn-logout').classList.add('hidden');
             }
-            loadBerita(); // Reload konten sesuai status login
+            loadBerita();
         });
 
         document.getElementById('btn-login').addEventListener('click', () => {
@@ -148,7 +142,6 @@
 
         document.getElementById('btn-logout').addEventListener('click', () => signOut(auth));
 
-        // Simpan / Edit Berita
         const btnSimpan = document.getElementById('btn-simpan-berita');
         btnSimpan.addEventListener('click', async () => {
             const idEdit = document.getElementById('edit-id').value;
@@ -159,17 +152,34 @@
             const fotoFile = document.getElementById('foto-berita').files[0];
 
             if(!judul || quill.getText().trim().length === 0) return showAlert("Judul dan isi tidak boleh kosong", false);
-            btnSimpan.textContent = "Menyimpan...";
+            
+            btnSimpan.textContent = "Memproses...";
+            btnSimpan.disabled = true;
 
             try {
-                let fotoUrl = ""; // Bawaan kosong
+                let fotoUrl = ""; 
                 
-                // Jika user upload foto
+                // JIKA ADA FOTO, UPLOAD KE IMGBB DULU
                 if (fotoFile) {
-                    const storageRef = ref(storage, 'foto_berita/' + Date.now() + '_' + fotoFile.name);
-                    await uploadBytes(storageRef, fotoFile);
-                    fotoUrl = await getDownloadURL(storageRef);
+                    btnSimpan.textContent = "Mengunggah Foto ke ImgBB...";
+                    const formData = new FormData();
+                    formData.append("image", fotoFile);
+
+                    const imgbbResponse = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {
+                        method: 'POST',
+                        body: formData
+                    });
+                    
+                    const imgbbResult = await imgbbResponse.json();
+                    
+                    if(imgbbResult.success) {
+                        fotoUrl = imgbbResult.data.url; // Dapatkan link foto
+                    } else {
+                        throw new Error("Gagal mengunggah foto ke ImgBB");
+                    }
                 }
+
+                btnSimpan.textContent = "Menyimpan Berita...";
 
                 const dataBerita = {
                     judul: judul,
@@ -179,16 +189,13 @@
                     tanggal: new Date().toLocaleDateString('id-ID', { day:'numeric', month:'long', year:'numeric' }),
                 };
 
-                // Jika ada foto baru, tambahkan ke data
                 if(fotoUrl) dataBerita.fotoUrl = fotoUrl;
 
                 if (idEdit) {
-                    // Update data lama
                     dataBerita.diperbarui = serverTimestamp();
                     await updateDoc(doc(db, "berita", idEdit), dataBerita);
                     showAlert("Berita berhasil diperbarui!");
                 } else {
-                    // Buat data baru
                     dataBerita.timestamp = serverTimestamp();
                     await addDoc(collection(db, "berita"), dataBerita);
                     showAlert("Berita berhasil dipublikasi!");
@@ -200,7 +207,9 @@
                 console.error(e);
                 showAlert("Gagal menyimpan: " + e.message, false);
             }
+            
             btnSimpan.textContent = "Simpan Berita";
+            btnSimpan.disabled = false;
         });
 
         function resetForm() {
@@ -215,7 +224,6 @@
 
         document.getElementById('btn-batal-edit').addEventListener('click', resetForm);
 
-        // Load Berita
         async function loadBerita() {
             const container = document.getElementById('berita-container');
             container.innerHTML = '<p class="text-gray-500">Memuat data...</p>';
@@ -227,17 +235,15 @@
             querySnapshot.forEach((doc) => {
                 const data = doc.data();
                 
-                // Jika user tidak login, jangan tampilkan DRAFT
                 if (!currentUser && data.status === 'draft') return;
 
                 const tagBadge = data.tag ? `<span class="bg-gray-200 text-gray-700 text-xs px-2 py-1 rounded-full">${data.tag}</span>` : '';
                 const draftBadge = data.status === 'draft' ? `<span class="bg-yellow-500 text-white text-xs px-2 py-1 rounded">DRAFT</span>` : '';
                 const fotoHTML = data.fotoUrl ? `<img src="${data.fotoUrl}" class="w-full h-48 object-cover">` : '';
 
-                // Tombol edit (Hanya muncul jika login)
                 const actionButtons = currentUser ? `
-                    <div class="mt-4 border-t pt-3">
-                        <button onclick="window.editBerita('${doc.id}', '${data.judul}', '${data.tag}', '${data.status}', \`${data.isi.replace(/"/g, '&quot;')}\`)" class="text-sm bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">Edit</button>
+                    <div class="mt-4 border-t pt-3 flex gap-2">
+                        <button onclick="window.editBerita('${doc.id}', '${data.judul.replace(/'/g, "\\'")}', '${data.tag}', '${data.status}', \`${data.isi.replace(/`/g, '\\`')}\`)" class="text-sm bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">Edit</button>
                     </div>
                 ` : '';
 
@@ -253,7 +259,6 @@
                                 <span class="text-xs text-gray-500">📅 ${data.tanggal}</span>
                                 ${tagBadge}
                             </div>
-                            <!-- Isi dirender sebagai HTML asli dari Editor -->
                             <div class="text-gray-700 text-sm prose">${data.isi}</div> 
                             ${actionButtons}
                         </div>
@@ -262,13 +267,12 @@
             });
         }
 
-        // Fungsi Global untuk dipanggil dari tombol Edit di HTML
         window.editBerita = (id, judul, tag, status, isi) => {
             document.getElementById('edit-id').value = id;
             document.getElementById('judul-berita').value = judul;
             document.getElementById('tag-berita').value = tag !== 'undefined' ? tag : '';
             document.getElementById('status-berita').value = status;
-            quill.root.innerHTML = isi; // Masukkan teks ke editor
+            quill.root.innerHTML = isi; 
             
             document.getElementById('btn-batal-edit').classList.remove('hidden');
             window.scrollTo({ top: document.getElementById('dashboard-section').offsetTop, behavior: 'smooth' });
