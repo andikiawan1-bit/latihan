@@ -3,33 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal Perisai Diri</title>
+    <title>SIM Perisai Diri</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+    <style>
+        /* Agar tabel rapi di HP */
+        .table-responsive { display: block; width: 100%; overflow-x: auto; }
+        /* Sembunyikan scrollbar untuk tab navigasi */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
 </head>
 <body class="bg-gray-100 font-sans text-gray-800">
 
     <nav class="bg-red-700 text-white p-4 shadow-md sticky top-0 z-50">
-        <div class="container mx-auto flex justify-between items-center max-w-5xl">
+        <div class="container mx-auto flex justify-between items-center max-w-6xl">
             <h1 class="text-xl font-bold flex items-center gap-2"><span class="text-2xl">🛡️</span> Perisai Diri</h1>
-            <div id="nav-menu" class="flex gap-2">
+            <div id="nav-menu" class="flex gap-2 items-center">
+                <span id="welcome-text" class="hidden md:block text-sm font-semibold mr-2"></span>
                 <button id="btn-show-login" class="bg-white text-red-700 px-4 py-2 rounded font-bold shadow hover:bg-gray-100">Masuk</button>
                 <button id="btn-logout" class="bg-black text-white px-4 py-2 rounded font-semibold hover:bg-gray-900 hidden">Keluar</button>
             </div>
         </div>
     </nav>
 
-    <!-- Tab Menu Khusus Admin -->
+    <!-- Tab Menu Khusus Admin (Bisa digeser/scroll di HP) -->
     <div id="admin-tabs" class="bg-white shadow border-b border-gray-200 hidden sticky top-[68px] z-40">
-        <div class="container mx-auto max-w-5xl flex overflow-x-auto">
-            <button onclick="switchTab('berita')" id="tab-berita" class="tab-btn px-6 py-3 font-bold text-red-700 border-b-4 border-red-700 whitespace-nowrap">📝 Berita & Info</button>
-            <button onclick="switchTab('siswa')" id="tab-siswa" class="tab-btn px-6 py-3 font-bold text-gray-500 border-b-4 border-transparent hover:text-red-700 whitespace-nowrap">👥 Data Siswa</button>
-            <button onclick="switchTab('absensi')" id="tab-absensi" class="tab-btn px-6 py-3 font-bold text-gray-500 border-b-4 border-transparent hover:text-red-700 whitespace-nowrap">📅 Jurnal & Absensi</button>
+        <div class="container mx-auto max-w-6xl flex overflow-x-auto no-scrollbar">
+            <button onclick="switchTab('berita')" id="tab-berita" class="tab-btn px-5 py-3 font-bold text-red-700 border-b-4 border-red-700 whitespace-nowrap">📝 Berita</button>
+            <button onclick="switchTab('siswa')" id="tab-siswa" class="tab-btn px-5 py-3 font-bold text-gray-500 border-b-4 border-transparent hover:text-red-700 whitespace-nowrap">👥 Siswa</button>
+            <button onclick="switchTab('absensi')" id="tab-absensi" class="tab-btn px-5 py-3 font-bold text-gray-500 border-b-4 border-transparent hover:text-red-700 whitespace-nowrap">📅 Latihan</button>
+            <button onclick="switchTab('keuangan')" id="tab-keuangan" class="tab-btn px-5 py-3 font-bold text-gray-500 border-b-4 border-transparent hover:text-red-700 whitespace-nowrap">💰 Keuangan</button>
+            <button onclick="switchTab('surat')" id="tab-surat" class="tab-btn px-5 py-3 font-bold text-gray-500 border-b-4 border-transparent hover:text-red-700 whitespace-nowrap">✉️ Surat</button>
+            <button onclick="switchTab('profil')" id="tab-profil" class="tab-btn px-5 py-3 font-bold text-gray-500 border-b-4 border-transparent hover:text-red-700 whitespace-nowrap">⚙️ Profil</button>
         </div>
     </div>
 
-    <div class="container mx-auto p-4 mt-6 max-w-5xl">
+    <div class="container mx-auto p-4 mt-4 max-w-6xl">
         <div id="alert-box" class="hidden mb-6 p-3 rounded font-bold text-white text-center shadow-lg"></div>
 
         <!-- ========================================== -->
@@ -37,81 +48,76 @@
         <!-- ========================================== -->
         <div id="section-berita">
             <div id="auth-section" class="max-w-md mx-auto bg-white p-8 rounded-xl shadow border-t-4 border-red-600 mb-10 text-center">
-                <h2 class="text-2xl font-bold mb-2">Portal Pelatih & Pengurus</h2>
-                <button id="btn-login-google" class="mt-4 flex items-center justify-center gap-3 bg-white border-2 border-gray-200 text-gray-700 px-4 py-3 rounded-lg w-full font-bold hover:bg-gray-50 shadow-sm">
-                    <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-6 h-6" alt="Google">
-                    Lanjutkan dengan Google
+                <h2 class="text-2xl font-bold mb-2">Portal Pengurus</h2>
+                <button id="btn-login-google" class="mt-4 flex items-center justify-center gap-3 bg-white border border-gray-300 text-gray-700 px-4 py-3 rounded-lg w-full font-bold hover:bg-gray-50 shadow-sm">
+                    <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-6 h-6" alt="Google"> Lanjutkan dengan Google
                 </button>
             </div>
 
-            <div id="dashboard-berita" class="hidden mb-10 bg-white p-8 rounded-xl shadow border-l-4 border-red-600">
-                <h2 class="text-2xl font-bold text-red-700 mb-4">Tulis Berita Baru</h2>
-                <input type="hidden" id="edit-id" value="">
+            <div id="dashboard-berita" class="hidden mb-10 bg-white p-6 rounded-xl shadow border-l-4 border-red-600">
+                <h2 class="text-xl font-bold text-red-700 mb-4" id="title-form-berita">Tulis Berita Baru</h2>
+                <input type="hidden" id="edit-id-berita" value="">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                    <input type="text" id="judul-berita" placeholder="Judul Berita" class="w-full p-3 border rounded">
-                    <input type="text" id="tag-berita" placeholder="Kategori/Tag" class="w-full p-3 border rounded">
+                    <input type="text" id="judul-berita" placeholder="Judul Berita" class="w-full p-2 border rounded">
+                    <input type="text" id="tag-berita" placeholder="Kategori/Tag" class="w-full p-2 border rounded">
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     <div>
                         <label class="block text-sm font-bold mb-1">Unggah Foto Utama</label>
-                        <input type="file" id="foto-berita" accept="image/*" class="w-full p-2 border rounded">
+                        <input type="file" id="foto-berita" accept="image/*" class="w-full p-2 border rounded text-sm">
                     </div>
                     <div>
                         <label class="block text-sm font-bold mb-1">Status</label>
-                        <select id="status-berita" class="w-full p-3 border rounded font-bold">
+                        <select id="status-berita" class="w-full p-2 border rounded font-bold">
                             <option value="publish">Publikasikan</option>
-                            <option value="draft">Simpan ke Draft</option>
+                            <option value="draft">Draft (Sembunyikan)</option>
                         </select>
                     </div>
                 </div>
                 <div class="mb-4 bg-white"><div id="editor-container" class="h-48 rounded-b"></div></div>
-                <button id="btn-simpan-berita" class="bg-red-600 text-white px-6 py-2 rounded font-bold shadow hover:bg-red-700">Simpan Berita</button>
+                <div class="flex gap-2">
+                    <button id="btn-simpan-berita" class="bg-red-600 text-white px-6 py-2 rounded font-bold shadow hover:bg-red-700">Simpan Berita</button>
+                    <button id="btn-batal-berita" class="bg-gray-400 text-white px-4 py-2 rounded font-bold hidden">Batal Edit</button>
+                </div>
             </div>
 
-            <h2 class="text-2xl font-bold mb-4 border-l-4 border-black pl-3 mt-4">Portal Informasi</h2>
-            <div id="berita-container" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+            <h2 class="text-2xl font-bold mb-4 border-l-4 border-black pl-3 mt-4">Papan Informasi</h2>
+            <div id="berita-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
         </div>
 
         <!-- ========================================== -->
-        <!-- HALAMAN 2: DATA SISWA & EXPORT/IMPORT      -->
+        <!-- HALAMAN 2: DATA SISWA                      -->
         <!-- ========================================== -->
         <div id="section-siswa" class="hidden">
-            <div class="bg-white p-6 rounded-xl shadow border-l-4 border-blue-600 mb-8">
-                <h2 class="text-xl font-bold mb-4 text-blue-800">Daftarkan Siswa Baru</h2>
+            <div class="bg-white p-6 rounded-xl shadow border-l-4 border-blue-600 mb-6">
+                <h2 class="text-xl font-bold mb-4 text-blue-800" id="title-form-siswa">Form Data Siswa</h2>
+                <input type="hidden" id="edit-id-siswa" value="">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                    <input type="text" id="nama-siswa" placeholder="Nama Lengkap Siswa" class="w-full p-3 border rounded">
-                    
-                    <!-- Input Tingkatan Fleksibel (Bisa ketik atau pilih) -->
-                    <input type="text" id="sabuk-siswa" list="opsi-sabuk" placeholder="Ketik atau Pilih Tingkatan" class="w-full p-3 border rounded">
+                    <input type="text" id="nama-siswa" placeholder="Nama Lengkap Siswa" class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-400">
+                    <input type="text" id="sabuk-siswa" list="opsi-sabuk" placeholder="Tingkatan / Sabuk" class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-400">
                     <datalist id="opsi-sabuk">
-                        <option value="Dasar 1 (Putih)">
-                        <option value="Dasar 2 (Hitam)">
-                        <option value="Keluarga (Merah)">
+                        <option value="Dasar 1 (Putih)"><option value="Dasar 2 (Hitam)"><option value="Keluarga (Merah)">
                     </datalist>
-
-                    <input type="text" id="ranting-siswa" placeholder="Nama Ranting / Tempat" class="w-full p-3 border rounded">
+                    <input type="text" id="ranting-siswa" placeholder="Ranting / Tempat Latihan" class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-400">
                 </div>
-                <button id="btn-simpan-siswa" class="bg-blue-600 text-white px-6 py-2 rounded font-bold shadow hover:bg-blue-700">Tambahkan Siswa</button>
-            </div>
-
-            <div class="flex justify-between items-end mb-4 flex-wrap gap-3">
-                <h3 class="text-xl font-bold">Daftar Anggota Siswa</h3>
                 <div class="flex gap-2">
-                    <button id="btn-export-siswa" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded font-bold shadow flex items-center gap-1 text-sm">📥 Ekspor CSV</button>
-                    <input type="file" id="file-import-siswa" accept=".csv" class="hidden">
-                    <button onclick="document.getElementById('file-import-siswa').click()" class="bg-blue-800 hover:bg-blue-900 text-white px-4 py-2 rounded font-bold shadow flex items-center gap-1 text-sm">📤 Impor CSV</button>
+                    <button id="btn-simpan-siswa" class="bg-blue-600 text-white px-6 py-2 rounded font-bold shadow hover:bg-blue-700">Simpan Data</button>
+                    <button id="btn-batal-siswa" class="bg-gray-400 text-white px-4 py-2 rounded font-bold hidden">Batal</button>
                 </div>
             </div>
-            
-            <div class="bg-white rounded-xl shadow overflow-hidden">
-                <table class="min-w-full text-left border-collapse">
+
+            <div class="flex justify-between items-center mb-4 flex-wrap gap-2">
+                <h3 class="text-xl font-bold">Daftar Anggota</h3>
+                <div class="flex gap-2">
+                    <button id="btn-export-siswa" class="bg-green-600 text-white px-3 py-1 rounded shadow text-sm font-bold">📥 Ekspor CSV</button>
+                    <input type="file" id="file-import-siswa" accept=".csv" class="hidden">
+                    <button onclick="document.getElementById('file-import-siswa').click()" class="bg-gray-700 text-white px-3 py-1 rounded shadow text-sm font-bold">📤 Impor CSV</button>
+                </div>
+            </div>
+            <div class="bg-white rounded-xl shadow table-responsive">
+                <table class="min-w-full text-left border-collapse whitespace-nowrap">
                     <thead class="bg-gray-800 text-white">
-                        <tr>
-                            <th class="py-3 px-4 uppercase font-semibold text-sm">Nama Lengkap</th>
-                            <th class="py-3 px-4 uppercase font-semibold text-sm">Tingkatan</th>
-                            <th class="py-3 px-4 uppercase font-semibold text-sm">Ranting</th>
-                            <th class="py-3 px-4 uppercase font-semibold text-sm text-center">Aksi</th>
-                        </tr>
+                        <tr><th class="p-3">Nama Lengkap</th><th class="p-3">Tingkatan</th><th class="p-3">Ranting</th><th class="p-3 text-center">Aksi</th></tr>
                     </thead>
                     <tbody id="tabel-siswa" class="text-gray-700 divide-y divide-gray-200"></tbody>
                 </table>
@@ -119,55 +125,163 @@
         </div>
 
         <!-- ========================================== -->
-        <!-- HALAMAN 3: JURNAL LATIHAN & ABSENSI        -->
+        <!-- HALAMAN 3: ABSENSI LATIHAN                 -->
         <!-- ========================================== -->
         <div id="section-absensi" class="hidden">
-            
-            <!-- Form Input Latihan -->
-            <div class="bg-white p-6 rounded-xl shadow border-l-4 border-green-600 mb-8">
-                <h2 class="text-xl font-bold text-green-800 mb-4">Catat Jurnal Latihan & Absensi Baru</h2>
-                
+            <div class="bg-white p-6 rounded-xl shadow border-l-4 border-green-600 mb-6">
+                <h2 class="text-xl font-bold text-green-800 mb-4" id="title-form-absen">Form Jurnal & Absensi</h2>
+                <input type="hidden" id="edit-id-absen" value="">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                    <div>
-                        <label class="font-bold text-gray-700 block mb-1">Tanggal Latihan</label>
-                        <input type="date" id="tanggal-absen" class="w-full p-3 border rounded font-bold text-gray-700">
-                    </div>
-                    <div>
-                        <label class="font-bold text-gray-700 block mb-1">Foto Latihan (Opsional)</label>
-                        <input type="file" id="foto-latihan" accept="image/*" class="w-full p-2 border rounded">
-                    </div>
+                    <div><label class="font-bold block mb-1">Tanggal</label><input type="date" id="tanggal-absen" class="w-full p-2 border rounded font-bold"></div>
+                    <div><label class="font-bold block mb-1">Foto Latihan (Opsional)</label><input type="file" id="foto-latihan" accept="image/*" class="w-full p-1 border rounded"></div>
                 </div>
-
-                <div class="mb-6">
-                    <label class="font-bold text-gray-700 block mb-1">Materi & Kegiatan Latihan</label>
-                    <textarea id="materi-latihan" placeholder="Tulis rincian kegiatan (Misal: Fisik lari 15 menit, Materi tendangan sabit...)" class="w-full p-3 border rounded h-24"></textarea>
+                <div class="mb-4">
+                    <label class="font-bold block mb-1">Materi Latihan</label>
+                    <textarea id="materi-latihan" placeholder="Tulis rincian kegiatan..." class="w-full p-2 border rounded h-20"></textarea>
                 </div>
-
-                <h3 class="font-bold text-gray-800 mb-3 border-b pb-2">Checklist Kehadiran Siswa</h3>
-                <div class="overflow-x-auto mb-6">
-                    <table class="min-w-full text-left border-collapse">
-                        <tbody id="tabel-absensi" class="divide-y divide-gray-100"></tbody>
-                    </table>
+                <h3 class="font-bold mb-2 border-b pb-1">Checklist Kehadiran</h3>
+                <div class="table-responsive mb-4">
+                    <table class="min-w-full"><tbody id="tabel-absensi" class="divide-y divide-gray-100"></tbody></table>
                 </div>
-                
-                <div class="flex justify-end">
-                    <button id="btn-simpan-absen" class="bg-green-600 text-white px-8 py-3 rounded-lg font-bold shadow-lg hover:bg-green-700 flex items-center gap-2">✅ Simpan Jurnal & Absensi</button>
+                <div class="flex justify-end gap-2">
+                    <button id="btn-batal-absen" class="bg-gray-400 text-white px-6 py-2 rounded font-bold hidden">Batal Edit</button>
+                    <button id="btn-simpan-absen" class="bg-green-600 text-white px-8 py-2 rounded font-bold shadow hover:bg-green-700">Simpan Absensi</button>
                 </div>
             </div>
 
-            <!-- Riwayat Latihan (Tampil di bawah) -->
-            <div class="flex justify-between items-end mb-4 border-t pt-8">
-                <h3 class="text-2xl font-bold border-l-4 border-green-600 pl-3">Riwayat Latihan</h3>
-                <button id="btn-export-absen" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded font-bold shadow text-sm">📥 Download Laporan Excel</button>
+            <div class="flex justify-between items-center mb-4 mt-8 border-t pt-6">
+                <h3 class="text-xl font-bold border-l-4 border-green-600 pl-2">Riwayat Latihan</h3>
+                <button id="btn-export-absen" class="bg-green-600 text-white px-3 py-1 rounded shadow text-sm font-bold">📥 Ekspor Excel</button>
             </div>
-            
             <div id="riwayat-absensi-container" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
         </div>
+
+        <!-- ========================================== -->
+        <!-- HALAMAN 4: KEUANGAN (KAS)                  -->
+        <!-- ========================================== -->
+        <div id="section-keuangan" class="hidden">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div class="col-span-1 md:col-span-3 bg-gradient-to-r from-blue-700 to-indigo-800 p-6 rounded-xl shadow-lg text-white flex justify-between items-center">
+                    <div>
+                        <p class="text-blue-200 font-bold text-sm uppercase tracking-wider">Total Saldo Kas Saat Ini</p>
+                        <h2 class="text-4xl font-extrabold mt-1" id="total-saldo">Rp 0</h2>
+                    </div>
+                    <div class="text-5xl opacity-50">💰</div>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl shadow border-l-4 border-indigo-600 mb-6">
+                <h2 class="text-xl font-bold text-indigo-800 mb-4" id="title-form-keuangan">Catat Transaksi</h2>
+                <input type="hidden" id="edit-id-keuangan" value="">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                    <div><label class="font-bold text-xs">Tanggal</label><input type="date" id="tgl-kas" class="w-full p-2 border rounded font-bold"></div>
+                    <div>
+                        <label class="font-bold text-xs">Jenis</label>
+                        <select id="jenis-kas" class="w-full p-2 border rounded font-bold">
+                            <option value="Masuk">Masuk (+)</option>
+                            <option value="Keluar">Keluar (-)</option>
+                        </select>
+                    </div>
+                    <div><label class="font-bold text-xs">Nominal (Rp)</label><input type="number" id="nominal-kas" placeholder="Contoh: 50000" class="w-full p-2 border rounded"></div>
+                    <div><label class="font-bold text-xs">Keterangan</label><input type="text" id="ket-kas" placeholder="Misal: Iuran bulanan" class="w-full p-2 border rounded"></div>
+                </div>
+                <div class="flex gap-2">
+                    <button id="btn-simpan-keuangan" class="bg-indigo-600 text-white px-6 py-2 rounded font-bold shadow hover:bg-indigo-700">Simpan Transaksi</button>
+                    <button id="btn-batal-keuangan" class="bg-gray-400 text-white px-4 py-2 rounded font-bold hidden">Batal</button>
+                </div>
+            </div>
+
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold">Riwayat Transaksi</h3>
+                <div class="flex gap-2">
+                    <button id="btn-export-kas" class="bg-green-600 text-white px-3 py-1 rounded shadow text-sm font-bold">📥 CSV</button>
+                    <input type="file" id="file-import-kas" accept=".csv" class="hidden">
+                    <button onclick="document.getElementById('file-import-kas').click()" class="bg-gray-700 text-white px-3 py-1 rounded shadow text-sm font-bold">📤 Import</button>
+                </div>
+            </div>
+            <div class="bg-white rounded-xl shadow table-responsive">
+                <table class="min-w-full text-left whitespace-nowrap">
+                    <thead class="bg-gray-800 text-white">
+                        <tr><th class="p-3">Tgl</th><th class="p-3">Keterangan</th><th class="p-3 text-right">Masuk</th><th class="p-3 text-right">Keluar</th><th class="p-3 text-center">Aksi</th></tr>
+                    </thead>
+                    <tbody id="tabel-keuangan" class="divide-y divide-gray-200"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- HALAMAN 5: PERSURATAN                      -->
+        <!-- ========================================== -->
+        <div id="section-surat" class="hidden">
+            <div class="bg-white p-6 rounded-xl shadow border-l-4 border-yellow-500 mb-6">
+                <h2 class="text-xl font-bold text-yellow-700 mb-4" id="title-form-surat">Catat Arsip Surat</h2>
+                <input type="hidden" id="edit-id-surat" value="">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                    <div><label class="font-bold text-xs">Tanggal</label><input type="date" id="tgl-surat" class="w-full p-2 border rounded font-bold"></div>
+                    <div>
+                        <label class="font-bold text-xs">Jenis Surat</label>
+                        <select id="jenis-surat" class="w-full p-2 border rounded font-bold">
+                            <option value="Masuk">Surat Masuk</option><option value="Keluar">Surat Keluar</option>
+                        </select>
+                    </div>
+                    <div><label class="font-bold text-xs">Nomor Surat</label><input type="text" id="no-surat" placeholder="01/PD/2026" class="w-full p-2 border rounded"></div>
+                    <div><label class="font-bold text-xs">Asal / Tujuan</label><input type="text" id="asal-surat" placeholder="Misal: IPSI Cabang" class="w-full p-2 border rounded"></div>
+                </div>
+                <div class="mb-4">
+                    <label class="font-bold text-xs">Perihal / Isi Ringkas</label>
+                    <input type="text" id="perihal-surat" placeholder="Undangan Rapat Kerja" class="w-full p-2 border rounded">
+                </div>
+                <div class="flex gap-2">
+                    <button id="btn-simpan-surat" class="bg-yellow-500 text-white px-6 py-2 rounded font-bold shadow hover:bg-yellow-600">Simpan Arsip</button>
+                    <button id="btn-batal-surat" class="bg-gray-400 text-white px-4 py-2 rounded font-bold hidden">Batal</button>
+                </div>
+            </div>
+
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold">Arsip Surat</h3>
+                <button id="btn-export-surat" class="bg-green-600 text-white px-3 py-1 rounded shadow text-sm font-bold">📥 Ekspor CSV</button>
+            </div>
+            <div class="bg-white rounded-xl shadow table-responsive">
+                <table class="min-w-full text-left whitespace-nowrap">
+                    <thead class="bg-gray-800 text-white">
+                        <tr><th class="p-3">Tgl</th><th class="p-3">Jenis</th><th class="p-3">No. Surat</th><th class="p-3">Asal/Tujuan</th><th class="p-3">Perihal</th><th class="p-3 text-center">Aksi</th></tr>
+                    </thead>
+                    <tbody id="tabel-surat" class="divide-y divide-gray-200"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- HALAMAN 6: PROFIL PENGGUNA                 -->
+        <!-- ========================================== -->
+        <div id="section-profil" class="hidden">
+            <div class="max-w-md mx-auto bg-white p-8 rounded-xl shadow border-t-4 border-gray-600">
+                <h2 class="text-2xl font-bold mb-6 text-center">Pengaturan Profil</h2>
+                <div class="flex justify-center mb-6">
+                    <img id="profil-foto" src="https://via.placeholder.com/100" class="w-24 h-24 rounded-full border-4 border-gray-200 shadow">
+                </div>
+                <div class="mb-4">
+                    <label class="font-bold text-gray-700 text-sm">Alamat Email Terdaftar</label>
+                    <input type="text" id="profil-email" class="w-full p-3 border rounded bg-gray-100 text-gray-500" disabled>
+                </div>
+                <div class="mb-6">
+                    <label class="font-bold text-gray-700 text-sm">Nama Lengkap Tampilan</label>
+                    <p class="text-xs text-gray-500 mb-1">Ubah jika nama dari akun Google Anda tidak sesuai/salah eja.</p>
+                    <input type="text" id="profil-nama" class="w-full p-3 border rounded focus:ring-2 focus:ring-gray-400 font-bold">
+                </div>
+                <button id="btn-update-profil" class="w-full bg-gray-800 text-white px-4 py-3 rounded font-bold hover:bg-black shadow">Simpan Perubahan Nama</button>
+            </div>
+        </div>
+
     </div>
 
+    <!-- ========================================== -->
+    <!-- SCRIPT FIREBASE & LOGIKA APLIKASI          -->
+    <!-- ========================================== -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        // Tambahkan updateProfile di sini
+        import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut, updateProfile } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, collection, addDoc, getDocs, updateDoc, doc, getDoc, setDoc, deleteDoc, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         // ==========================================
@@ -195,7 +309,7 @@
         let currentUserRole = 'user';
         let dataSiswaGlobal = []; 
 
-        const quill = new Quill('#editor-container', { theme: 'snow', placeholder: 'Tulis isi berita di sini...' });
+        const quill = new Quill('#editor-container', { theme: 'snow', placeholder: 'Ketik isi berita/info di sini...' });
 
         function showAlert(msg, isSuccess = true) {
             const box = document.getElementById('alert-box');
@@ -203,16 +317,15 @@
             box.className = `mb-6 p-4 rounded-lg font-bold text-white text-center shadow-lg block ${isSuccess ? 'bg-green-600' : 'bg-red-600'}`;
             box.classList.remove('hidden');
             window.scrollTo({ top: 0, behavior: 'smooth' });
-            setTimeout(() => box.classList.add('hidden'), 4000);
+            setTimeout(() => box.classList.add('hidden'), 3500);
         }
 
         // ==========================================
         // SISTEM TAB NAVIGASI
         // ==========================================
         window.switchTab = (tabName) => {
-            document.getElementById('section-berita').classList.add('hidden');
-            document.getElementById('section-siswa').classList.add('hidden');
-            document.getElementById('section-absensi').classList.add('hidden');
+            const sections = ['berita', 'siswa', 'absensi', 'keuangan', 'surat', 'profil'];
+            sections.forEach(s => document.getElementById(`section-${s}`).classList.add('hidden'));
             document.getElementById(`section-${tabName}`).classList.remove('hidden');
 
             document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -220,14 +333,17 @@
                 btn.classList.add('border-transparent', 'text-gray-500');
             });
             const activeBtn = document.getElementById(`tab-${tabName}`);
-            activeBtn.classList.remove('border-transparent', 'text-gray-500');
-            activeBtn.classList.add('border-red-700', 'text-red-700');
-
-            if(tabName === 'siswa') loadSiswa();
-            if(tabName === 'absensi') {
-                loadFormAbsensi();
-                loadRiwayatAbsensi();
+            if(activeBtn){
+                activeBtn.classList.remove('border-transparent', 'text-gray-500');
+                activeBtn.classList.add('border-red-700', 'text-red-700');
             }
+
+            // Muat data saat tab dibuka
+            if(tabName === 'siswa') loadSiswa();
+            if(tabName === 'absensi') { loadSiswa().then(() => { loadFormAbsensi(); loadRiwayatAbsensi(); }); }
+            if(tabName === 'keuangan') loadKeuangan();
+            if(tabName === 'surat') loadSurat();
+            if(tabName === 'profil') loadProfil();
         };
 
         // ==========================================
@@ -241,10 +357,10 @@
                 if (!userSnap.exists()) {
                     await setDoc(userRef, {
                         uid: result.user.uid, nama: result.user.displayName, email: result.user.email,
-                        role: 'admin_ranting', tanggal_daftar: serverTimestamp()
+                        role: 'admin_ranting', tanggal_daftar: serverTimestamp() // Bawaan Pelatih
                     });
                 }
-                showAlert("Login Berhasil!");
+                showAlert("Berhasil Masuk!");
             } catch (error) { showAlert("Gagal Login", false); }
         });
 
@@ -259,7 +375,17 @@
                 
                 const userRef = doc(db, 'users', user.uid);
                 const userSnap = await getDoc(userRef);
-                currentUserRole = userSnap.exists() ? userSnap.data().role : 'user';
+                
+                let displayName = user.displayName;
+                if(userSnap.exists()){
+                    currentUserRole = userSnap.data().role;
+                    if(userSnap.data().nama) displayName = userSnap.data().nama; // Ambil nama dari DB jika ada
+                } else {
+                    currentUserRole = 'user';
+                }
+
+                document.getElementById('welcome-text').textContent = "Halo, " + displayName.split(' ')[0];
+                document.getElementById('welcome-text').classList.remove('hidden');
 
                 const allowed = ['admin_berita', 'admin_ranting', 'admin_cabang', 'pelatih'];
                 if (allowed.includes(currentUserRole)) {
@@ -267,6 +393,7 @@
                     document.getElementById('dashboard-berita').classList.remove('hidden');
                 }
             } else {
+                document.getElementById('welcome-text').classList.add('hidden');
                 document.getElementById('auth-section').classList.remove('hidden');
                 document.getElementById('btn-show-login').classList.remove('hidden');
                 document.getElementById('btn-logout').classList.add('hidden');
@@ -278,298 +405,68 @@
         });
 
         // ==========================================
-        // FITUR DATA SISWA & IMPORT/EXPORT
+        // FUNGSI UMUM UPLOAD GAMBAR KE IMGBB
         // ==========================================
-        document.getElementById('btn-simpan-siswa').addEventListener('click', async () => {
-            const nama = document.getElementById('nama-siswa').value;
-            const sabuk = document.getElementById('sabuk-siswa').value;
-            const ranting = document.getElementById('ranting-siswa').value;
-
-            if(!nama || !sabuk || !ranting) return showAlert("Semua kolom siswa harus diisi!", false);
-            document.getElementById('btn-simpan-siswa').textContent = "Menyimpan...";
-
-            try {
-                await addDoc(collection(db, "siswa"), { nama, sabuk, ranting, timestamp: serverTimestamp() });
-                showAlert("Siswa berhasil ditambahkan!");
-                document.getElementById('nama-siswa').value = '';
-                document.getElementById('sabuk-siswa').value = '';
-                loadSiswa();
-            } catch (e) { showAlert("Gagal menyimpan siswa", false); }
-            document.getElementById('btn-simpan-siswa').textContent = "Tambahkan Siswa";
-        });
-
-        async function loadSiswa() {
-            const tbody = document.getElementById('tabel-siswa');
-            const q = query(collection(db, "siswa"), orderBy("nama", "asc"));
-            const snapshot = await getDocs(q);
-            tbody.innerHTML = '';
-            dataSiswaGlobal = [];
-
-            if(snapshot.empty) return tbody.innerHTML = '<tr><td colspan="4" class="p-4 text-center">Belum ada data siswa.</td></tr>';
-
-            snapshot.forEach((docSnap) => {
-                const data = docSnap.data();
-                dataSiswaGlobal.push({ id: docSnap.id, nama: data.nama, sabuk: data.sabuk, ranting: data.ranting });
-                tbody.innerHTML += `
-                    <tr class="hover:bg-gray-50 border-b">
-                        <td class="py-3 px-4 font-bold text-gray-800">${data.nama}</td>
-                        <td class="py-3 px-4">${data.sabuk}</td>
-                        <td class="py-3 px-4">${data.ranting}</td>
-                        <td class="py-3 px-4 text-center">
-                            <button onclick="window.hapusSiswa('${docSnap.id}')" class="text-sm bg-red-100 text-red-700 px-3 py-1 rounded hover:bg-red-200">Hapus</button>
-                        </td>
-                    </tr>`;
-            });
+        async function uploadToImgBB(fileObj) {
+            const formData = new FormData(); formData.append("image", fileObj);
+            const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, { method: 'POST', body: formData });
+            const result = await res.json();
+            if(result.success) return result.data.url;
+            throw new Error("Gagal upload gambar");
         }
-
-        window.hapusSiswa = async (id) => {
-            if(confirm("Yakin hapus siswa ini?")) {
-                await deleteDoc(doc(db, "siswa", id));
-                showAlert("Siswa dihapus.");
-                loadSiswa();
-            }
-        };
-
-        // EXPORT SISWA CSV
-        document.getElementById('btn-export-siswa').addEventListener('click', () => {
-            let csv = "Nama Lengkap,Tingkatan,Ranting\n";
-            dataSiswaGlobal.forEach(s => { csv += `"${s.nama}","${s.sabuk}","${s.ranting}"\n`; });
-            downloadCSV(csv, 'Data_Siswa_Perisai_Diri.csv');
-        });
-
-        // IMPORT SISWA CSV
-        document.getElementById('file-import-siswa').addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if(!file) return;
-            const reader = new FileReader();
-            reader.onload = async (event) => {
-                const lines = event.target.result.split('\n');
-                let count = 0;
-                showAlert("Memproses file Impor...", true);
-                for(let i=1; i<lines.length; i++){
-                    const cols = lines[i].split(',');
-                    if(cols.length >= 3){
-                        const nama = cols[0].replace(/"/g, '').trim();
-                        const sabuk = cols[1].replace(/"/g, '').trim();
-                        const ranting = cols[2].replace(/"/g, '').trim();
-                        if(nama) {
-                            await addDoc(collection(db, "siswa"), { nama, sabuk, ranting, timestamp: serverTimestamp() });
-                            count++;
-                        }
-                    }
-                }
-                showAlert(`Berhasil mengimpor ${count} data siswa!`);
-                e.target.value = ''; // Reset file input
-                loadSiswa();
-            };
-            reader.readAsText(file);
-        });
-
-        // ==========================================
-        // FITUR JURNAL & ABSENSI LATIHAN
-        // ==========================================
-        document.getElementById('tanggal-absen').valueAsDate = new Date();
-
-        async function loadFormAbsensi() {
-            if(dataSiswaGlobal.length === 0) await loadSiswa(); // Pastikan data siswa ada
-            const tbody = document.getElementById('tabel-absensi');
-            tbody.innerHTML = '';
-
-            if(dataSiswaGlobal.length === 0) return tbody.innerHTML = '<tr><td class="p-6 text-center text-red-500 font-bold">Data siswa kosong. Tambahkan siswa dulu!</td></tr>';
-
-            dataSiswaGlobal.forEach(siswa => {
-                tbody.innerHTML += `
-                    <tr class="hover:bg-gray-50 border-b border-gray-100 flex flex-col md:flex-row md:items-center p-2 md:p-0">
-                        <td class="py-2 md:py-4 px-4 w-full md:w-1/3">
-                            <div class="font-bold text-gray-800 text-lg">${siswa.nama}</div>
-                            <div class="text-xs text-gray-500">${siswa.sabuk} | Ranting: ${siswa.ranting}</div>
-                        </td>
-                        <td class="py-2 md:py-4 px-4 w-full md:w-2/3">
-                            <div class="flex gap-2 flex-wrap">
-                                <label class="cursor-pointer flex-1 text-center">
-                                    <input type="radio" name="absen_${siswa.id}" value="Hadir" checked class="peer sr-only">
-                                    <div class="px-2 py-2 rounded font-bold border-2 border-gray-200 peer-checked:bg-green-500 peer-checked:text-white peer-checked:border-green-500">Hadir</div>
-                                </label>
-                                <label class="cursor-pointer flex-1 text-center">
-                                    <input type="radio" name="absen_${siswa.id}" value="Sakit" class="peer sr-only">
-                                    <div class="px-2 py-2 rounded font-bold border-2 border-gray-200 peer-checked:bg-yellow-400 peer-checked:text-white peer-checked:border-yellow-400">Sakit</div>
-                                </label>
-                                <label class="cursor-pointer flex-1 text-center">
-                                    <input type="radio" name="absen_${siswa.id}" value="Izin" class="peer sr-only">
-                                    <div class="px-2 py-2 rounded font-bold border-2 border-gray-200 peer-checked:bg-blue-400 peer-checked:text-white peer-checked:border-blue-400">Izin</div>
-                                </label>
-                                <label class="cursor-pointer flex-1 text-center">
-                                    <input type="radio" name="absen_${siswa.id}" value="Alpha" class="peer sr-only">
-                                    <div class="px-2 py-2 rounded font-bold border-2 border-gray-200 peer-checked:bg-red-500 peer-checked:text-white peer-checked:border-red-500">Alpha</div>
-                                </label>
-                            </div>
-                        </td>
-                    </tr>`;
-            });
-        }
-
-        document.getElementById('btn-simpan-absen').addEventListener('click', async () => {
-            const tanggal = document.getElementById('tanggal-absen').value;
-            const materi = document.getElementById('materi-latihan').value;
-            const fotoFile = document.getElementById('foto-latihan').files[0];
-            
-            if(!tanggal) return showAlert("Pilih tanggal absen terlebih dahulu!", false);
-            
-            let rekapAbsensi = [];
-            dataSiswaGlobal.forEach(siswa => {
-                const opsi = document.querySelector(`input[name="absen_${siswa.id}"]:checked`);
-                rekapAbsensi.push({ siswa_id: siswa.id, nama: siswa.nama, status: opsi ? opsi.value : "Alpha" });
-            });
-
-            const btn = document.getElementById('btn-simpan-absen');
-            btn.textContent = "Menyimpan ke Database...";
-            btn.disabled = true;
-
-            try {
-                let fotoUrl = "";
-                // Upload Foto Latihan ke ImgBB jika ada
-                if (fotoFile) {
-                    btn.textContent = "Mengunggah Foto Latihan...";
-                    const formData = new FormData();
-                    formData.append("image", fotoFile);
-                    const imgbbRes = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, { method: 'POST', body: formData });
-                    const imgbbResult = await imgbbRes.json();
-                    if(imgbbResult.success) fotoUrl = imgbbResult.data.url;
-                }
-
-                btn.textContent = "Merekap Absensi...";
-                await addDoc(collection(db, "absensi"), {
-                    tanggal: tanggal,
-                    materi: materi,
-                    fotoUrl: fotoUrl,
-                    pencatat: currentUser.displayName,
-                    data_kehadiran: rekapAbsensi,
-                    timestamp: serverTimestamp()
-                });
-                
-                showAlert("Jurnal & Absensi berhasil disimpan!");
-                document.getElementById('materi-latihan').value = '';
-                document.getElementById('foto-latihan').value = '';
-                loadFormAbsensi(); 
-                loadRiwayatAbsensi();
-            } catch (e) { showAlert("Gagal menyimpan absensi.", false); }
-            
-            btn.innerHTML = "✅ Simpan Jurnal & Absensi";
-            btn.disabled = false;
-        });
-
-        async function loadRiwayatAbsensi() {
-            const container = document.getElementById('riwayat-absensi-container');
-            const q = query(collection(db, "absensi"), orderBy("tanggal", "desc"));
-            const snapshot = await getDocs(q);
-            container.innerHTML = snapshot.empty ? '<p class="text-gray-500 italic">Belum ada riwayat latihan.</p>' : '';
-
-            snapshot.forEach(docSnap => {
-                const d = docSnap.data();
-                let h=0, s=0, i=0, a=0;
-                d.data_kehadiran.forEach(k => {
-                    if(k.status === 'Hadir') h++; else if(k.status === 'Sakit') s++; else if(k.status === 'Izin') i++; else a++;
-                });
-
-                const imgHtml = d.fotoUrl ? `<img src="${d.fotoUrl}" class="w-full h-40 object-cover rounded mt-3 border border-gray-200">` : '';
-                
-                container.innerHTML += `
-                    <div class="bg-white border rounded-xl p-5 shadow-sm hover:shadow transition">
-                        <div class="flex justify-between items-start mb-2">
-                            <div class="font-bold text-lg text-green-700">📅 ${d.tanggal}</div>
-                            <button onclick="window.hapusAbsensi('${docSnap.id}')" class="text-xs text-red-500 hover:text-red-700 font-bold">Hapus</button>
-                        </div>
-                        <div class="text-sm text-gray-500 mb-2">Pencatat/Pelatih: <span class="font-bold text-gray-700">${d.pencatat}</span></div>
-                        <div class="text-sm text-gray-700 bg-gray-50 p-3 rounded mb-3 border">
-                            <span class="font-bold block mb-1">Materi & Kegiatan:</span>
-                            ${d.materi ? d.materi.replace(/\n/g, '<br>') : '<span class="italic text-gray-400">Tidak ada catatan materi</span>'}
-                        </div>
-                        <div class="grid grid-cols-4 gap-2 text-center text-xs font-bold mb-2">
-                            <div class="bg-green-100 text-green-700 p-2 rounded">Hadir: ${h}</div>
-                            <div class="bg-yellow-100 text-yellow-700 p-2 rounded">Sakit: ${s}</div>
-                            <div class="bg-blue-100 text-blue-700 p-2 rounded">Izin: ${i}</div>
-                            <div class="bg-red-100 text-red-700 p-2 rounded">Alpha: ${a}</div>
-                        </div>
-                        ${imgHtml}
-                    </div>`;
-            });
-        }
-
-        window.hapusAbsensi = async (id) => {
-            if(confirm("Yakin ingin menghapus jurnal absensi ini?")) {
-                await deleteDoc(doc(db, "absensi", id));
-                showAlert("Jurnal absensi dihapus.");
-                loadRiwayatAbsensi();
-            }
-        };
-
-        // EXPORT ABSENSI CSV
-        document.getElementById('btn-export-absen').addEventListener('click', async () => {
-            let csv = "Tanggal Latihan,Pelatih,Materi,Nama Siswa,Status Kehadiran\n";
-            const q = query(collection(db, "absensi"), orderBy("tanggal", "desc"));
-            const snapshot = await getDocs(q);
-            snapshot.forEach(docSnap => {
-                const d = docSnap.data();
-                const materiBersih = d.materi ? d.materi.replace(/\n/g, ' - ').replace(/"/g, "'") : '';
-                d.data_kehadiran.forEach(k => {
-                    csv += `"${d.tanggal}","${d.pencatat}","${materiBersih}","${k.nama}","${k.status}"\n`;
-                });
-            });
-            downloadCSV(csv, 'Laporan_Absensi_Perisai_Diri.csv');
-        });
-
         function downloadCSV(csvContent, fileName) {
             const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
-            a.setAttribute('href', url);
-            a.setAttribute('download', fileName);
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
+            a.href = url; a.download = fileName;
+            document.body.appendChild(a); a.click(); document.body.removeChild(a);
         }
 
         // ==========================================
-        // BERITA (Kode yang sudah ada)
+        // MODUL 1: BERITA
         // ==========================================
+        const resetFormBerita = () => {
+            document.getElementById('edit-id-berita').value = '';
+            document.getElementById('title-form-berita').textContent = 'Tulis Berita Baru';
+            document.getElementById('btn-simpan-berita').textContent = 'Simpan Berita';
+            document.getElementById('btn-batal-berita').classList.add('hidden');
+            document.getElementById('judul-berita').value = '';
+            document.getElementById('tag-berita').value = '';
+            document.getElementById('foto-berita').value = '';
+            quill.setContents([]);
+        };
+        document.getElementById('btn-batal-berita').addEventListener('click', resetFormBerita);
+
         document.getElementById('btn-simpan-berita').addEventListener('click', async () => {
-            const idEdit = document.getElementById('edit-id').value;
+            const idEdit = document.getElementById('edit-id-berita').value;
             const judul = document.getElementById('judul-berita').value;
             const tag = document.getElementById('tag-berita').value;
             const status = document.getElementById('status-berita').value;
             const isi = quill.root.innerHTML;
             const fotoFile = document.getElementById('foto-berita').files[0];
 
-            if(!judul || quill.getText().trim().length === 0) return showAlert("Judul dan isi tidak boleh kosong", false);
+            if(!judul || quill.getText().trim().length === 0) return showAlert("Judul dan isi wajib diisi!", false);
             
             const btn = document.getElementById('btn-simpan-berita');
-            btn.textContent = "Memproses..."; btn.disabled = true;
+            btn.textContent = "Menyimpan..."; btn.disabled = true;
 
             try {
                 let fotoUrl = ""; 
-                if (fotoFile) {
-                    const formData = new FormData(); formData.append("image", fotoFile);
-                    const imgbbRes = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, { method: 'POST', body: formData });
-                    const imgbbResult = await imgbbRes.json();
-                    if(imgbbResult.success) fotoUrl = imgbbResult.data.url;
-                }
+                if (fotoFile) fotoUrl = await uploadToImgBB(fotoFile);
 
-                const dataBerita = { judul, tag, isi, status, penulis: currentUser.displayName, tanggal: new Date().toLocaleDateString('id-ID', { day:'numeric', month:'long', year:'numeric' }) };
-                if(fotoUrl) dataBerita.fotoUrl = fotoUrl;
+                const dbData = { judul, tag, isi, status, penulis: document.getElementById('welcome-text').textContent.replace('Halo, ', ''), tanggal: new Date().toLocaleDateString('id-ID', { day:'numeric', month:'long', year:'numeric' }) };
+                if(fotoUrl) dbData.fotoUrl = fotoUrl;
 
                 if (idEdit) {
-                    dataBerita.diperbarui = serverTimestamp();
-                    await updateDoc(doc(db, "berita", idEdit), dataBerita);
-                    showAlert("Berita diperbarui!");
+                    dbData.diperbarui = serverTimestamp();
+                    await updateDoc(doc(db, "berita", idEdit), dbData);
+                    showAlert("Berita berhasil diupdate!");
                 } else {
-                    dataBerita.timestamp = serverTimestamp();
-                    await addDoc(collection(db, "berita"), dataBerita);
-                    showAlert("Berita dipublikasi!");
+                    dbData.timestamp = serverTimestamp();
+                    await addDoc(collection(db, "berita"), dbData);
+                    showAlert("Berita berhasil dipublikasi!");
                 }
-                
-                document.getElementById('edit-id').value = ''; document.getElementById('judul-berita').value = '';
-                document.getElementById('foto-berita').value = ''; document.getElementById('tag-berita').value = '';
-                quill.setContents([]); loadBerita();
+                resetFormBerita(); loadBerita();
             } catch (e) { showAlert("Gagal menyimpan berita", false); }
             btn.textContent = "Simpan Berita"; btn.disabled = false;
         });
@@ -585,28 +482,471 @@
                 const allowed = ['admin_berita', 'admin_ranting', 'admin_cabang', 'pelatih'];
                 if (data.status === 'draft' && !allowed.includes(currentUserRole)) return;
 
-                const tagBadge = data.tag ? `<span class="bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded border">${data.tag}</span>` : '';
                 const draftBadge = data.status === 'draft' ? `<span class="bg-yellow-500 text-white text-xs px-2 py-1 rounded">DRAFT</span>` : '';
-                const fotoHTML = data.fotoUrl ? `<img src="${data.fotoUrl}" class="w-full h-48 object-cover border-b">` : '';
+                const fotoHTML = data.fotoUrl ? `<img src="${data.fotoUrl}" class="w-full h-40 object-cover border-b">` : '';
+                
+                // Tambahkan Tombol Edit dan Delete jika Admin
+                const btnEdit = allowed.includes(currentUserRole) ? `
+                    <div class="mt-4 border-t pt-3 flex gap-2">
+                        <button onclick="window.editBerita('${docSnap.id}')" class="text-xs bg-blue-100 text-blue-700 px-3 py-1 rounded font-bold hover:bg-blue-200">Edit</button>
+                        <button onclick="window.hapusBerita('${docSnap.id}')" class="text-xs bg-red-100 text-red-700 px-3 py-1 rounded font-bold hover:bg-red-200">Hapus</button>
+                    </div>` : '';
 
                 container.innerHTML += `
                     <div class="bg-white border rounded-xl overflow-hidden shadow-sm flex flex-col">
                         ${fotoHTML}
-                        <div class="p-5 flex-1">
-                            <div class="flex justify-between items-start mb-2">
-                                <h3 class="font-bold text-xl text-gray-900">${data.judul}</h3>
-                                ${draftBadge}
+                        <div class="p-5 flex-1 flex flex-col justify-between">
+                            <div>
+                                <div class="flex justify-between items-start mb-2"><h3 class="font-bold text-lg leading-tight text-gray-900">${data.judul}</h3>${draftBadge}</div>
+                                <div class="text-xs text-gray-500 mb-3">📅 ${data.tanggal} | Oleh: ${data.penulis}</div>
+                                <div class="text-gray-700 text-sm prose max-w-none line-clamp-3 mb-2">${data.isi}</div> 
                             </div>
-                            <div class="flex items-center gap-2 mb-4">
-                                <span class="text-xs text-gray-500">📅 ${data.tanggal} (Oleh ${data.penulis})</span>
-                                ${tagBadge}
-                            </div>
-                            <div class="text-gray-700 text-sm prose max-w-none line-clamp-4">${data.isi}</div> 
+                            ${btnEdit}
                         </div>
-                    </div>
-                `;
+                    </div>`;
             });
         }
+        
+        window.editBerita = async (id) => {
+            const docRef = await getDoc(doc(db, "berita", id));
+            if(docRef.exists()) {
+                const d = docRef.data();
+                document.getElementById('edit-id-berita').value = id;
+                document.getElementById('judul-berita').value = d.judul;
+                document.getElementById('tag-berita').value = d.tag || '';
+                document.getElementById('status-berita').value = d.status;
+                quill.root.innerHTML = d.isi;
+                document.getElementById('title-form-berita').textContent = 'Edit Berita';
+                document.getElementById('btn-simpan-berita').textContent = 'Update Berita';
+                document.getElementById('btn-batal-berita').classList.remove('hidden');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        };
+        window.hapusBerita = async (id) => {
+            if(confirm("Yakin hapus berita ini?")) { await deleteDoc(doc(db, "berita", id)); showAlert("Berita dihapus."); loadBerita(); }
+        };
+
+        // ==========================================
+        // MODUL 2: SISWA
+        // ==========================================
+        const resetFormSiswa = () => {
+            document.getElementById('edit-id-siswa').value = '';
+            document.getElementById('nama-siswa').value = '';
+            document.getElementById('sabuk-siswa').value = '';
+            document.getElementById('ranting-siswa').value = '';
+            document.getElementById('title-form-siswa').textContent = 'Form Data Siswa';
+            document.getElementById('btn-simpan-siswa').textContent = 'Simpan Data';
+            document.getElementById('btn-batal-siswa').classList.add('hidden');
+        };
+        document.getElementById('btn-batal-siswa').addEventListener('click', resetFormSiswa);
+
+        document.getElementById('btn-simpan-siswa').addEventListener('click', async () => {
+            const idEdit = document.getElementById('edit-id-siswa').value;
+            const nama = document.getElementById('nama-siswa').value;
+            const sabuk = document.getElementById('sabuk-siswa').value;
+            const ranting = document.getElementById('ranting-siswa').value;
+
+            if(!nama || !sabuk || !ranting) return showAlert("Semua kolom siswa harus diisi!", false);
+            
+            try {
+                if(idEdit) {
+                    await updateDoc(doc(db, "siswa", idEdit), { nama, sabuk, ranting });
+                    showAlert("Data siswa diupdate!");
+                } else {
+                    await addDoc(collection(db, "siswa"), { nama, sabuk, ranting, timestamp: serverTimestamp() });
+                    showAlert("Siswa ditambahkan!");
+                }
+                resetFormSiswa(); loadSiswa();
+            } catch (e) { showAlert("Gagal menyimpan siswa", false); }
+        });
+
+        async function loadSiswa() {
+            const tbody = document.getElementById('tabel-siswa');
+            const q = query(collection(db, "siswa"), orderBy("nama", "asc"));
+            const snapshot = await getDocs(q);
+            tbody.innerHTML = ''; dataSiswaGlobal = [];
+
+            if(snapshot.empty) return tbody.innerHTML = '<tr><td colspan="4" class="p-4 text-center">Belum ada data siswa.</td></tr>';
+
+            snapshot.forEach((docSnap) => {
+                const d = docSnap.data();
+                dataSiswaGlobal.push({ id: docSnap.id, ...d });
+                tbody.innerHTML += `
+                    <tr class="hover:bg-gray-50 border-b">
+                        <td class="p-3 font-bold text-gray-800">${d.nama}</td><td class="p-3">${d.sabuk}</td><td class="p-3">${d.ranting}</td>
+                        <td class="p-3 text-center">
+                            <button onclick="window.editSiswa('${docSnap.id}', '${d.nama}', '${d.sabuk}', '${d.ranting}')" class="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded">Edit</button>
+                            <button onclick="window.hapusSiswa('${docSnap.id}')" class="text-xs bg-red-100 text-red-700 px-2 py-1 rounded">Hapus</button>
+                        </td>
+                    </tr>`;
+            });
+        }
+        window.editSiswa = (id, nama, sabuk, ranting) => {
+            document.getElementById('edit-id-siswa').value = id;
+            document.getElementById('nama-siswa').value = nama;
+            document.getElementById('sabuk-siswa').value = sabuk;
+            document.getElementById('ranting-siswa').value = ranting;
+            document.getElementById('title-form-siswa').textContent = 'Edit Data Siswa';
+            document.getElementById('btn-simpan-siswa').textContent = 'Update Data';
+            document.getElementById('btn-batal-siswa').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+        window.hapusSiswa = async (id) => {
+            if(confirm("Yakin hapus siswa ini?")) { await deleteDoc(doc(db, "siswa", id)); showAlert("Siswa dihapus."); loadSiswa(); }
+        };
+
+        document.getElementById('btn-export-siswa').addEventListener('click', () => {
+            let csv = "Nama Lengkap,Tingkatan,Ranting\n";
+            dataSiswaGlobal.forEach(s => { csv += `"${s.nama}","${s.sabuk}","${s.ranting}"\n`; });
+            downloadCSV(csv, 'Data_Siswa.csv');
+        });
+        document.getElementById('file-import-siswa').addEventListener('change', (e) => {
+            const file = e.target.files[0]; if(!file) return;
+            const reader = new FileReader();
+            reader.onload = async (event) => {
+                const lines = event.target.result.split('\n'); let count=0; showAlert("Mengimpor data...", true);
+                for(let i=1; i<lines.length; i++){
+                    const c = lines[i].split(',');
+                    if(c.length >= 3 && c[0].trim()){
+                        await addDoc(collection(db, "siswa"), { nama: c[0].replace(/"/g,'').trim(), sabuk: c[1].replace(/"/g,'').trim(), ranting: c[2].replace(/"/g,'').trim(), timestamp: serverTimestamp() });
+                        count++;
+                    }
+                }
+                showAlert(`Berhasil impor ${count} siswa!`); loadSiswa(); e.target.value = '';
+            }; reader.readAsText(file);
+        });
+
+        // ==========================================
+        // MODUL 3: ABSENSI
+        // ==========================================
+        document.getElementById('tanggal-absen').valueAsDate = new Date();
+        const resetFormAbsen = () => {
+            document.getElementById('edit-id-absen').value = '';
+            document.getElementById('materi-latihan').value = '';
+            document.getElementById('foto-latihan').value = '';
+            document.getElementById('title-form-absen').textContent = 'Form Jurnal & Absensi';
+            document.getElementById('btn-simpan-absen').textContent = 'Simpan Absensi';
+            document.getElementById('btn-batal-absen').classList.add('hidden');
+            loadFormAbsensi(); // reset radio button ke Hadir
+        }
+        document.getElementById('btn-batal-absen').addEventListener('click', resetFormAbsen);
+
+        async function loadFormAbsensi(existingData = null) {
+            const tbody = document.getElementById('tabel-absensi');
+            tbody.innerHTML = '';
+            if(dataSiswaGlobal.length === 0) return tbody.innerHTML = '<tr><td class="p-4 text-center text-red-500">Data siswa kosong.</td></tr>';
+
+            dataSiswaGlobal.forEach(siswa => {
+                // Jika edit mode, cari status sebelumnya
+                let statusChecked = 'Hadir';
+                if(existingData) {
+                    const found = existingData.find(k => k.siswa_id === siswa.id);
+                    if(found) statusChecked = found.status;
+                }
+
+                tbody.innerHTML += `
+                    <tr class="hover:bg-gray-50 border-b flex flex-col md:flex-row md:items-center p-2">
+                        <td class="w-full md:w-1/3 mb-2 md:mb-0"><div class="font-bold">${siswa.nama}</div><div class="text-xs text-gray-500">${siswa.sabuk} | ${siswa.ranting}</div></td>
+                        <td class="w-full md:w-2/3">
+                            <div class="flex gap-1 text-sm font-bold">
+                                <label class="cursor-pointer flex-1 text-center"><input type="radio" name="absen_${siswa.id}" value="Hadir" ${statusChecked==='Hadir'?'checked':''} class="peer sr-only"><div class="p-2 rounded border peer-checked:bg-green-500 peer-checked:text-white">Hadir</div></label>
+                                <label class="cursor-pointer flex-1 text-center"><input type="radio" name="absen_${siswa.id}" value="Sakit" ${statusChecked==='Sakit'?'checked':''} class="peer sr-only"><div class="p-2 rounded border peer-checked:bg-yellow-400 peer-checked:text-white">Sakit</div></label>
+                                <label class="cursor-pointer flex-1 text-center"><input type="radio" name="absen_${siswa.id}" value="Izin" ${statusChecked==='Izin'?'checked':''} class="peer sr-only"><div class="p-2 rounded border peer-checked:bg-blue-400 peer-checked:text-white">Izin</div></label>
+                                <label class="cursor-pointer flex-1 text-center"><input type="radio" name="absen_${siswa.id}" value="Alpha" ${statusChecked==='Alpha'?'checked':''} class="peer sr-only"><div class="p-2 rounded border peer-checked:bg-red-500 peer-checked:text-white">Alpha</div></label>
+                            </div>
+                        </td>
+                    </tr>`;
+            });
+        }
+
+        document.getElementById('btn-simpan-absen').addEventListener('click', async () => {
+            const idEdit = document.getElementById('edit-id-absen').value;
+            const tanggal = document.getElementById('tanggal-absen').value;
+            const materi = document.getElementById('materi-latihan').value;
+            const fotoFile = document.getElementById('foto-latihan').files[0];
+            
+            if(!tanggal) return showAlert("Pilih tanggal absen!", false);
+            
+            let rekap = [];
+            dataSiswaGlobal.forEach(s => {
+                const opt = document.querySelector(`input[name="absen_${s.id}"]:checked`);
+                rekap.push({ siswa_id: s.id, nama: s.nama, status: opt ? opt.value : "Alpha" });
+            });
+
+            const btn = document.getElementById('btn-simpan-absen');
+            btn.textContent = "Menyimpan..."; btn.disabled = true;
+
+            try {
+                let fotoUrl = "";
+                if (fotoFile) fotoUrl = await uploadToImgBB(fotoFile);
+
+                const dbData = { tanggal, materi, pencatat: document.getElementById('welcome-text').textContent.replace('Halo, ', ''), data_kehadiran: rekap };
+                if(fotoUrl) dbData.fotoUrl = fotoUrl;
+
+                if(idEdit) {
+                    await updateDoc(doc(db, "absensi", idEdit), dbData);
+                    showAlert("Absensi diupdate!");
+                } else {
+                    dbData.timestamp = serverTimestamp();
+                    await addDoc(collection(db, "absensi"), dbData);
+                    showAlert("Absensi disimpan!");
+                }
+                resetFormAbsen(); loadRiwayatAbsensi();
+            } catch (e) { showAlert("Gagal simpan absensi", false); }
+            btn.textContent = "Simpan Absensi"; btn.disabled = false;
+        });
+
+        async function loadRiwayatAbsensi() {
+            const container = document.getElementById('riwayat-absensi-container');
+            const q = query(collection(db, "absensi"), orderBy("tanggal", "desc"));
+            const snapshot = await getDocs(q);
+            container.innerHTML = snapshot.empty ? '<p class="text-gray-500 italic">Belum ada riwayat.</p>' : '';
+
+            snapshot.forEach(docSnap => {
+                const d = docSnap.data(); let h=0, s=0, i=0, a=0;
+                d.data_kehadiran.forEach(k => { if(k.status==='Hadir') h++; else if(k.status==='Sakit') s++; else if(k.status==='Izin') i++; else a++; });
+                
+                container.innerHTML += `
+                    <div class="bg-white border rounded-xl p-4 shadow-sm hover:shadow">
+                        <div class="flex justify-between font-bold mb-1"><span class="text-green-700">📅 ${d.tanggal}</span>
+                            <div>
+                                <button onclick="window.editAbsen('${docSnap.id}')" class="text-xs text-blue-500 mr-2">Edit</button>
+                                <button onclick="window.hapusAbsen('${docSnap.id}')" class="text-xs text-red-500">Hapus</button>
+                            </div>
+                        </div>
+                        <div class="text-xs text-gray-500 mb-2">Pencatat: ${d.pencatat}</div>
+                        <div class="text-xs bg-gray-50 p-2 rounded mb-2 border truncate">${d.materi || 'Tidak ada catatan'}</div>
+                        <div class="flex gap-1 text-xs font-bold text-center">
+                            <div class="flex-1 bg-green-100 text-green-700 p-1 rounded">H:${h}</div>
+                            <div class="flex-1 bg-yellow-100 text-yellow-700 p-1 rounded">S:${s}</div>
+                            <div class="flex-1 bg-blue-100 text-blue-700 p-1 rounded">I:${i}</div>
+                            <div class="flex-1 bg-red-100 text-red-700 p-1 rounded">A:${a}</div>
+                        </div>
+                    </div>`;
+            });
+        }
+        window.editAbsen = async (id) => {
+            const docRef = await getDoc(doc(db, "absensi", id));
+            if(docRef.exists()){
+                const d = docRef.data();
+                document.getElementById('edit-id-absen').value = id;
+                document.getElementById('tanggal-absen').value = d.tanggal;
+                document.getElementById('materi-latihan').value = d.materi || '';
+                document.getElementById('title-form-absen').textContent = 'Edit Jurnal & Absensi';
+                document.getElementById('btn-simpan-absen').textContent = 'Update Absensi';
+                document.getElementById('btn-batal-absen').classList.remove('hidden');
+                loadFormAbsensi(d.data_kehadiran); // Muat data radio button
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        };
+        window.hapusAbsen = async (id) => { if(confirm("Hapus absen ini?")) { await deleteDoc(doc(db, "absensi", id)); loadRiwayatAbsensi(); } };
+
+        // ==========================================
+        // MODUL 4: KEUANGAN KAS
+        // ==========================================
+        document.getElementById('tgl-kas').valueAsDate = new Date();
+        const resetFormKeuangan = () => {
+            document.getElementById('edit-id-keuangan').value = '';
+            document.getElementById('nominal-kas').value = '';
+            document.getElementById('ket-kas').value = '';
+            document.getElementById('title-form-keuangan').textContent = 'Catat Transaksi';
+            document.getElementById('btn-simpan-keuangan').textContent = 'Simpan Transaksi';
+            document.getElementById('btn-batal-keuangan').classList.add('hidden');
+        };
+        document.getElementById('btn-batal-keuangan').addEventListener('click', resetFormKeuangan);
+
+        document.getElementById('btn-simpan-keuangan').addEventListener('click', async () => {
+            const idEdit = document.getElementById('edit-id-keuangan').value;
+            const tgl = document.getElementById('tgl-kas').value;
+            const jenis = document.getElementById('jenis-kas').value;
+            const nominal = parseInt(document.getElementById('nominal-kas').value);
+            const ket = document.getElementById('ket-kas').value;
+
+            if(!tgl || !nominal || !ket) return showAlert("Lengkapi form keuangan!", false);
+            
+            const dbData = { tanggal: tgl, jenis, nominal, keterangan: ket, pencatat: document.getElementById('welcome-text').textContent.replace('Halo, ', '') };
+            try {
+                if(idEdit) { await updateDoc(doc(db, "keuangan", idEdit), dbData); showAlert("Transaksi diupdate!"); }
+                else { dbData.timestamp = serverTimestamp(); await addDoc(collection(db, "keuangan"), dbData); showAlert("Transaksi disimpan!"); }
+                resetFormKeuangan(); loadKeuangan();
+            } catch(e) { showAlert("Gagal simpan transaksi", false); }
+        });
+
+        async function loadKeuangan() {
+            const tbody = document.getElementById('tabel-keuangan');
+            const q = query(collection(db, "keuangan"), orderBy("tanggal", "desc"));
+            const snapshot = await getDocs(q);
+            tbody.innerHTML = ''; let saldoTotal = 0; let arrData = [];
+
+            if(snapshot.empty) tbody.innerHTML = '<tr><td colspan="5" class="p-4 text-center">Belum ada transaksi.</td></tr>';
+
+            snapshot.forEach(docSnap => {
+                const d = docSnap.data();
+                arrData.push({id: docSnap.id, ...d});
+                if(d.jenis === 'Masuk') saldoTotal += d.nominal; else saldoTotal -= d.nominal;
+                
+                const rpMasuk = d.jenis === 'Masuk' ? `Rp ${d.nominal.toLocaleString('id-ID')}` : '-';
+                const rpKeluar = d.jenis === 'Keluar' ? `Rp ${d.nominal.toLocaleString('id-ID')}` : '-';
+                const txColor = d.jenis === 'Masuk' ? 'text-green-600' : 'text-red-600';
+
+                tbody.innerHTML += `
+                    <tr class="hover:bg-gray-50 border-b font-semibold">
+                        <td class="p-3">${d.tanggal}</td>
+                        <td class="p-3">${d.keterangan} <div class="text-xs text-gray-400 font-normal">${d.pencatat}</div></td>
+                        <td class="p-3 text-right text-green-600">${rpMasuk}</td>
+                        <td class="p-3 text-right text-red-600">${rpKeluar}</td>
+                        <td class="p-3 text-center">
+                            <button onclick="window.editKas('${docSnap.id}', '${d.tanggal}', '${d.jenis}', ${d.nominal}, '${d.keterangan}')" class="text-xs text-blue-500 mr-2">Edit</button>
+                            <button onclick="window.hapusKas('${docSnap.id}')" class="text-xs text-red-500">Hapus</button>
+                        </td>
+                    </tr>`;
+            });
+            document.getElementById('total-saldo').textContent = `Rp ${saldoTotal.toLocaleString('id-ID')}`;
+            window.dataKasGlobal = arrData; // untuk export
+        }
+        window.editKas = (id, tgl, jenis, nom, ket) => {
+            document.getElementById('edit-id-keuangan').value = id;
+            document.getElementById('tgl-kas').value = tgl;
+            document.getElementById('jenis-kas').value = jenis;
+            document.getElementById('nominal-kas').value = nom;
+            document.getElementById('ket-kas').value = ket;
+            document.getElementById('title-form-keuangan').textContent = 'Edit Transaksi';
+            document.getElementById('btn-simpan-keuangan').textContent = 'Update Transaksi';
+            document.getElementById('btn-batal-keuangan').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+        window.hapusKas = async (id) => { if(confirm("Hapus transaksi ini?")) { await deleteDoc(doc(db, "keuangan", id)); loadKeuangan(); } };
+
+        // EXPORT & IMPORT KAS
+        document.getElementById('btn-export-kas').addEventListener('click', () => {
+            let csv = "Tanggal,Jenis,Nominal,Keterangan\n";
+            (window.dataKasGlobal || []).forEach(k => { csv += `"${k.tanggal}","${k.jenis}","${k.nominal}","${k.keterangan}"\n`; });
+            downloadCSV(csv, 'Keuangan_Kas.csv');
+        });
+        document.getElementById('file-import-kas').addEventListener('change', (e) => {
+            const file = e.target.files[0]; if(!file) return;
+            const reader = new FileReader();
+            reader.onload = async (event) => {
+                const lines = event.target.result.split('\n'); let c=0;
+                for(let i=1; i<lines.length; i++){
+                    const cols = lines[i].split(',');
+                    if(cols.length >= 4 && cols[0]){
+                        await addDoc(collection(db, "keuangan"), { tanggal: cols[0].replace(/"/g,''), jenis: cols[1].replace(/"/g,''), nominal: parseInt(cols[2].replace(/"/g,'')), keterangan: cols[3].replace(/"/g,''), pencatat: "Import", timestamp: serverTimestamp() }); c++;
+                    }
+                }
+                showAlert(`Impor ${c} transaksi berhasil!`); loadKeuangan(); e.target.value = '';
+            }; reader.readAsText(file);
+        });
+
+        // ==========================================
+        // MODUL 5: PERSURATAN
+        // ==========================================
+        document.getElementById('tgl-surat').valueAsDate = new Date();
+        const resetFormSurat = () => {
+            document.getElementById('edit-id-surat').value = '';
+            document.getElementById('no-surat').value = '';
+            document.getElementById('asal-surat').value = '';
+            document.getElementById('perihal-surat').value = '';
+            document.getElementById('btn-simpan-surat').textContent = 'Simpan Arsip';
+            document.getElementById('btn-batal-surat').classList.add('hidden');
+        };
+        document.getElementById('btn-batal-surat').addEventListener('click', resetFormSurat);
+
+        document.getElementById('btn-simpan-surat').addEventListener('click', async () => {
+            const idEdit = document.getElementById('edit-id-surat').value;
+            const tgl = document.getElementById('tgl-surat').value;
+            const jenis = document.getElementById('jenis-surat').value;
+            const no = document.getElementById('no-surat').value;
+            const asal = document.getElementById('asal-surat').value;
+            const perihal = document.getElementById('perihal-surat').value;
+
+            if(!tgl || !no || !perihal) return showAlert("Lengkapi form persuratan!", false);
+            const dbData = { tanggal: tgl, jenis, nomor_surat: no, asal_tujuan: asal, perihal };
+            
+            try {
+                if(idEdit) { await updateDoc(doc(db, "surat", idEdit), dbData); showAlert("Surat diupdate!"); }
+                else { dbData.timestamp = serverTimestamp(); await addDoc(collection(db, "surat"), dbData); showAlert("Arsip Surat disimpan!"); }
+                resetFormSurat(); loadSurat();
+            } catch(e) { showAlert("Gagal simpan surat", false); }
+        });
+
+        async function loadSurat() {
+            const tbody = document.getElementById('tabel-surat');
+            const q = query(collection(db, "surat"), orderBy("tanggal", "desc"));
+            const snapshot = await getDocs(q);
+            tbody.innerHTML = ''; let arr = [];
+            if(snapshot.empty) tbody.innerHTML = '<tr><td colspan="6" class="p-4 text-center">Belum ada arsip surat.</td></tr>';
+
+            snapshot.forEach(docSnap => {
+                const d = docSnap.data(); arr.push(d);
+                const badge = d.jenis === 'Masuk' ? 'bg-blue-100 text-blue-700' : 'bg-yellow-100 text-yellow-700';
+                tbody.innerHTML += `
+                    <tr class="hover:bg-gray-50 border-b">
+                        <td class="p-3">${d.tanggal}</td>
+                        <td class="p-3"><span class="px-2 py-1 rounded text-xs font-bold ${badge}">${d.jenis}</span></td>
+                        <td class="p-3 font-bold">${d.nomor_surat}</td>
+                        <td class="p-3">${d.asal_tujuan}</td>
+                        <td class="p-3">${d.perihal}</td>
+                        <td class="p-3 text-center">
+                            <button onclick="window.editSurat('${docSnap.id}', '${d.tanggal}', '${d.jenis}', '${d.nomor_surat}', '${d.asal_tujuan}', '${d.perihal}')" class="text-xs text-blue-500 mr-2">Edit</button>
+                            <button onclick="window.hapusSurat('${docSnap.id}')" class="text-xs text-red-500">Hapus</button>
+                        </td>
+                    </tr>`;
+            });
+            window.dataSuratGlobal = arr;
+        }
+        window.editSurat = (id, tgl, jenis, no, asal, perihal) => {
+            document.getElementById('edit-id-surat').value = id;
+            document.getElementById('tgl-surat').value = tgl;
+            document.getElementById('jenis-surat').value = jenis;
+            document.getElementById('no-surat').value = no;
+            document.getElementById('asal-surat').value = asal;
+            document.getElementById('perihal-surat').value = perihal;
+            document.getElementById('title-form-surat').textContent = 'Edit Arsip Surat';
+            document.getElementById('btn-simpan-surat').textContent = 'Update Surat';
+            document.getElementById('btn-batal-surat').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+        window.hapusSurat = async (id) => { if(confirm("Hapus surat ini?")) { await deleteDoc(doc(db, "surat", id)); loadSurat(); } };
+        
+        document.getElementById('btn-export-surat').addEventListener('click', () => {
+            let csv = "Tanggal,Jenis,No Surat,Asal/Tujuan,Perihal\n";
+            (window.dataSuratGlobal || []).forEach(s => { csv += `"${s.tanggal}","${s.jenis}","${s.nomor_surat}","${s.asal_tujuan}","${s.perihal}"\n`; });
+            downloadCSV(csv, 'Arsip_Surat.csv');
+        });
+
+        // ==========================================
+        // MODUL 6: PROFIL
+        // ==========================================
+        async function loadProfil() {
+            if(!currentUser) return;
+            document.getElementById('profil-foto').src = currentUser.photoURL || 'https://via.placeholder.com/100';
+            document.getElementById('profil-email').value = currentUser.email;
+            
+            const userRef = doc(db, 'users', currentUser.uid);
+            const userSnap = await getDoc(userRef);
+            if(userSnap.exists() && userSnap.data().nama) {
+                document.getElementById('profil-nama').value = userSnap.data().nama;
+            } else {
+                document.getElementById('profil-nama').value = currentUser.displayName;
+            }
+        }
+
+        document.getElementById('btn-update-profil').addEventListener('click', async () => {
+            const newName = document.getElementById('profil-nama').value;
+            if(!newName) return showAlert("Nama tidak boleh kosong", false);
+            
+            try {
+                // Update ke Authentication Google
+                await updateProfile(auth.currentUser, { displayName: newName });
+                // Update ke Database Firestore
+                await updateDoc(doc(db, 'users', currentUser.uid), { nama: newName });
+                
+                document.getElementById('welcome-text').textContent = "Halo, " + newName.split(' ')[0];
+                showAlert("Nama Profil Berhasil Diperbarui!");
+            } catch(e) { showAlert("Gagal memperbarui profil", false); }
+        });
+
     </script>
 </body>
 </html>
