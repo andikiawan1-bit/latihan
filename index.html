@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SIM Perisai Diri</title>
+    <title>Perisai Diri Bojonegoro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
@@ -15,21 +15,23 @@
 </head>
 <body class="bg-gray-100 font-sans text-gray-800 text-sm md:text-base">
 
+    <!-- NAVBAR UTAMA -->
     <nav class="bg-red-700 text-white p-4 shadow-md sticky top-0 z-50">
         <div class="container mx-auto flex justify-between items-center max-w-7xl">
             <h1 class="text-xl font-bold flex items-center gap-2"><span class="text-2xl">🛡️</span> Perisai Diri</h1>
             <div id="nav-menu" class="flex gap-3 items-center">
                 <span id="welcome-text" class="hidden md:block font-semibold"></span>
-                <button id="btn-show-login" class="bg-white text-red-700 px-4 py-2 rounded font-bold shadow hover:bg-gray-100">Masuk</button>
+                <button id="btn-show-login" class="bg-white text-red-700 px-4 py-2 rounded font-bold shadow hover:bg-gray-100">Masuk / Daftar</button>
                 <button id="btn-logout" class="bg-black text-white px-4 py-2 rounded font-semibold hover:bg-gray-900 hidden">Keluar</button>
             </div>
         </div>
     </nav>
 
-    <!-- Tab Menu Khusus Admin -->
+    <!-- TAB MENU KHUSUS ADMIN -->
     <div id="admin-tabs" class="bg-white shadow border-b border-gray-200 hidden sticky top-[68px] z-40">
         <div class="container mx-auto max-w-7xl flex overflow-x-auto no-scrollbar">
-            <button onclick="switchTab('berita')" id="tab-berita" class="tab-btn px-4 py-3 font-bold text-red-700 border-b-4 border-red-700 whitespace-nowrap">📝 Berita</button>
+            <button onclick="switchTab('utama')" id="tab-utama" class="tab-btn px-4 py-3 font-bold text-red-700 border-b-4 border-red-700 whitespace-nowrap">🏠 Beranda</button>
+            <button onclick="switchTab('jadwal')" id="tab-jadwal" class="tab-btn px-4 py-3 font-bold text-gray-500 border-b-4 border-transparent hover:text-red-700 whitespace-nowrap">📍 Jadwal</button>
             <button onclick="switchTab('siswa')" id="tab-siswa" class="tab-btn px-4 py-3 font-bold text-gray-500 border-b-4 border-transparent hover:text-red-700 whitespace-nowrap">👥 Siswa</button>
             <button onclick="switchTab('absensi')" id="tab-absensi" class="tab-btn px-4 py-3 font-bold text-gray-500 border-b-4 border-transparent hover:text-red-700 whitespace-nowrap">📅 Latihan</button>
             <button onclick="switchTab('keuangan')" id="tab-keuangan" class="tab-btn px-4 py-3 font-bold text-gray-500 border-b-4 border-transparent hover:text-red-700 whitespace-nowrap">💰 Keuangan</button>
@@ -43,16 +45,30 @@
         <div id="alert-box" class="hidden mb-6 p-3 rounded font-bold text-white text-center shadow-lg"></div>
 
         <!-- ========================================== -->
-        <!-- HALAMAN: BERITA                            -->
+        <!-- HALAMAN UTAMA: LANDING PAGE (PUBLIK)       -->
         <!-- ========================================== -->
-        <div id="section-berita">
-            <div id="auth-section" class="max-w-md mx-auto bg-white p-8 rounded-xl shadow border-t-4 border-red-600 mb-10 text-center">
-                <h2 class="text-2xl font-bold mb-2">Portal Anggota</h2>
-                <button id="btn-login-google" class="mt-4 flex items-center justify-center gap-3 bg-white border border-gray-300 text-gray-700 px-4 py-3 rounded w-full font-bold hover:bg-gray-50 shadow-sm">
-                    <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-6 h-6"> Lanjutkan dengan Google
-                </button>
+        <div id="section-utama">
+            
+            <!-- Hero / Pendaftaran & Login Section -->
+            <div id="auth-section" class="max-w-3xl mx-auto bg-white rounded-xl shadow overflow-hidden border-t-4 border-red-600 mb-10 flex flex-col md:flex-row">
+                <div class="bg-gray-50 p-8 md:w-1/2 border-b md:border-b-0 md:border-r border-gray-200">
+                    <h2 class="text-2xl font-bold mb-3 text-red-700">Gabung Perisai Diri</h2>
+                    <p class="text-gray-600 text-sm mb-4 leading-relaxed">
+                        Tertarik untuk belajar bela diri, membentuk karakter, dan menambah keluarga baru? Pendaftaran anggota baru dilakukan langsung di lokasi/tempat latihan (Ranting) terdekat. 
+                        Silakan lihat jadwal latihan di bawah ini dan kunjungi lokasi kami.
+                    </p>
+                    <a href="#jadwal-publik" class="inline-block bg-red-100 text-red-700 font-bold px-4 py-2 rounded shadow-sm hover:bg-red-200 transition">Lihat Lokasi Latihan ⬇️</a>
+                </div>
+                <div class="p-8 md:w-1/2 flex flex-col justify-center text-center">
+                    <h2 class="text-xl font-bold mb-2">Portal Anggota & Pengurus</h2>
+                    <p class="text-gray-500 mb-6 text-sm">Masuk untuk mengakses sistem administrasi dan absensi.</p>
+                    <button id="btn-login-google" class="flex items-center justify-center gap-3 bg-white border border-gray-300 text-gray-700 px-4 py-3 rounded-lg w-full font-bold hover:bg-gray-50 shadow-sm transition">
+                        <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-6 h-6"> Lanjutkan dengan Google
+                    </button>
+                </div>
             </div>
 
+            <!-- Form Tulis Berita (HANYA MUNCUL JIKA ADMIN) -->
             <div id="dashboard-berita" class="hidden mb-10 bg-white p-6 rounded-xl shadow border-l-4 border-red-600">
                 <h2 class="text-xl font-bold text-red-700 mb-4" id="title-form-berita">Tulis Berita Baru</h2>
                 <input type="hidden" id="edit-id-berita" value="">
@@ -73,8 +89,17 @@
                 </div>
             </div>
 
-            <div class="flex justify-between items-center mb-4 mt-4">
-                <h2 class="text-xl font-bold border-l-4 border-black pl-3">Papan Informasi</h2>
+            <!-- Jadwal Latihan Publik -->
+            <div id="jadwal-publik" class="pt-4">
+                <h2 class="text-2xl font-bold border-l-4 border-blue-600 pl-3 mb-4">Lokasi & Jadwal Latihan</h2>
+                <div id="jadwal-publik-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-10">
+                    <p class="text-gray-500 italic px-4">Memuat jadwal...</p>
+                </div>
+            </div>
+
+            <!-- Berita Publik -->
+            <div class="flex justify-between items-center mb-4 mt-4 border-t border-gray-200 pt-8">
+                <h2 class="text-2xl font-bold border-l-4 border-black pl-3">Papan Informasi</h2>
                 <input type="text" id="search-berita" placeholder="Cari berita..." class="p-2 border rounded w-1/3 text-sm">
             </div>
             <div id="berita-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
@@ -82,9 +107,40 @@
         </div>
 
         <!-- ========================================== -->
+        <!-- HALAMAN: MANAJEMEN JADWAL (ADMIN)          -->
+        <!-- ========================================== -->
+        <div id="section-jadwal" class="hidden">
+            <div class="bg-white p-6 rounded-xl shadow border-l-4 border-blue-500 mb-6">
+                <h2 class="text-xl font-bold text-blue-800 mb-4" id="title-form-jadwal">Tambah Jadwal Latihan / Ranting Baru</h2>
+                <input type="hidden" id="edit-id-jadwal" value="">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                    <div><label class="font-bold text-xs">Nama Ranting/Tempat</label><input type="text" id="nama-ranting" placeholder="Misal: SDN 1 Bojonegoro" class="w-full p-2 border rounded font-bold"></div>
+                    <div><label class="font-bold text-xs">Hari Latihan</label><input type="text" id="hari-latihan" placeholder="Misal: Selasa & Jumat" class="w-full p-2 border rounded"></div>
+                    <div><label class="font-bold text-xs">Jam Latihan</label><input type="text" id="jam-latihan" placeholder="Misal: 15.30 - 17.30" class="w-full p-2 border rounded"></div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div><label class="font-bold text-xs">Alamat Lengkap</label><input type="text" id="alamat-latihan" placeholder="Jl. Panglima Sudirman No.10" class="w-full p-2 border rounded"></div>
+                    <div><label class="font-bold text-xs">Link Google Maps (URL)</label><input type="url" id="link-maps" placeholder="https://goo.gl/maps/..." class="w-full p-2 border rounded text-blue-600"></div>
+                </div>
+                <div class="flex gap-2">
+                    <button id="btn-simpan-jadwal" class="bg-blue-600 text-white px-6 py-2 rounded font-bold shadow hover:bg-blue-700">Simpan Jadwal</button>
+                    <button id="btn-batal-jadwal" class="bg-gray-400 text-white px-4 py-2 rounded font-bold hidden">Batal</button>
+                </div>
+            </div>
+
+            <div class="flex justify-between items-center mb-2 flex-wrap gap-2">
+                <h3 class="text-xl font-bold">Daftar Jadwal Latihan</h3>
+            </div>
+            <div class="bg-white rounded-xl shadow table-responsive">
+                <table class="min-w-full text-left whitespace-nowrap"><thead class="bg-gray-800 text-white"><tr><th class="p-3">Nama Ranting</th><th class="p-3">Hari & Jam</th><th class="p-3">Alamat</th><th class="p-3 text-center">G-Maps</th><th class="p-3 text-center">Aksi</th></tr></thead><tbody id="tabel-jadwal" class="divide-y divide-gray-200"></tbody></table>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
         <!-- HALAMAN: DATA SISWA                        -->
         <!-- ========================================== -->
         <div id="section-siswa" class="hidden">
+            <!-- Isi Modul Siswa (Sama seperti sebelumnya) -->
             <div class="bg-white p-6 rounded-xl shadow border-l-4 border-blue-600 mb-6">
                 <h2 class="text-xl font-bold mb-4 text-blue-800" id="title-form-siswa">Form Data Siswa</h2>
                 <input type="hidden" id="edit-id-siswa" value="">
@@ -95,15 +151,15 @@
                     <input type="text" id="ranting-siswa" placeholder="Ranting / Tempat Latihan" class="w-full p-2 border rounded">
                 </div>
                 <div class="flex gap-2">
-                    <button id="btn-simpan-siswa" class="bg-blue-600 text-white px-6 py-2 rounded font-bold shadow hover:bg-blue-700">Simpan Data</button>
-                    <button id="btn-batal-siswa" class="bg-gray-400 text-white px-4 py-2 rounded font-bold hidden">Batal</button>
+                    <button id="btn-simpan-siswa" class="bg-blue-600 text-white px-6 py-2 rounded font-bold shadow">Simpan Data</button>
+                    <button id="btn-batal-siswa" class="bg-gray-400 text-white px-4 py-2 rounded hidden">Batal</button>
                 </div>
             </div>
 
             <div class="flex justify-between items-center mb-2 flex-wrap gap-2">
                 <h3 class="text-xl font-bold">Daftar Anggota</h3>
                 <div class="flex gap-2 items-center">
-                    <input type="text" id="search-siswa" placeholder="Cari nama/ranting..." class="p-2 border rounded text-sm w-40 md:w-64">
+                    <input type="text" id="search-siswa" placeholder="Cari nama..." class="p-2 border rounded text-sm w-40 md:w-64">
                     <button id="btn-export-siswa" class="bg-green-600 text-white px-3 py-2 rounded shadow text-sm font-bold">📥 CSV</button>
                     <input type="file" id="file-import-siswa" accept=".csv" class="hidden">
                     <button onclick="document.getElementById('file-import-siswa').click()" class="bg-gray-700 text-white px-3 py-2 rounded shadow text-sm font-bold">📤 Import</button>
@@ -119,6 +175,7 @@
         <!-- HALAMAN: ABSENSI LATIHAN                   -->
         <!-- ========================================== -->
         <div id="section-absensi" class="hidden">
+            <!-- Modul Absensi -->
             <div class="bg-white p-6 rounded-xl shadow border-l-4 border-green-600 mb-6">
                 <h2 class="text-xl font-bold text-green-800 mb-4" id="title-form-absen">Form Jurnal & Absensi</h2>
                 <input type="hidden" id="edit-id-absen" value="">
@@ -156,6 +213,7 @@
         <!-- HALAMAN: KEUANGAN (KAS)                    -->
         <!-- ========================================== -->
         <div id="section-keuangan" class="hidden">
+            <!-- Modul Keuangan -->
             <div class="bg-gradient-to-r from-blue-700 to-indigo-800 p-6 rounded-xl shadow-lg text-white flex justify-between items-center mb-6">
                 <div><p class="text-blue-200 font-bold text-sm">Saldo Kas Saat Ini</p><h2 class="text-3xl md:text-4xl font-extrabold mt-1" id="total-saldo">Rp 0</h2></div>
                 <div class="text-4xl opacity-50">💰</div>
@@ -167,12 +225,12 @@
                 <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-4">
                     <div><label class="font-bold text-xs">Tanggal</label><input type="date" id="tgl-kas" class="w-full p-2 border rounded font-bold"></div>
                     <div><label class="font-bold text-xs">Jenis</label><select id="jenis-kas" class="w-full p-2 border rounded font-bold"><option value="Masuk">Masuk (+)</option><option value="Keluar">Keluar (-)</option></select></div>
-                    <div><label class="font-bold text-xs">Nominal (Rp)</label><input type="number" id="nominal-kas" placeholder="50000" class="w-full p-2 border rounded"></div>
-                    <div><label class="font-bold text-xs">Keterangan</label><input type="text" id="ket-kas" placeholder="Iuran" class="w-full p-2 border rounded"></div>
-                    <div><label class="font-bold text-xs">Link Bukti (Opsional)</label><input type="url" id="link-kas" placeholder="https://..." class="w-full p-2 border rounded"></div>
+                    <div><label class="font-bold text-xs">Nominal (Rp)</label><input type="number" id="nominal-kas" class="w-full p-2 border rounded"></div>
+                    <div><label class="font-bold text-xs">Keterangan</label><input type="text" id="ket-kas" class="w-full p-2 border rounded"></div>
+                    <div><label class="font-bold text-xs">Link Bukti (URL)</label><input type="url" id="link-kas" class="w-full p-2 border rounded"></div>
                 </div>
                 <div class="flex gap-2">
-                    <button id="btn-simpan-keuangan" class="bg-indigo-600 text-white px-6 py-2 rounded font-bold shadow hover:bg-indigo-700">Simpan Transaksi</button>
+                    <button id="btn-simpan-keuangan" class="bg-indigo-600 text-white px-6 py-2 rounded font-bold shadow">Simpan Transaksi</button>
                     <button id="btn-batal-keuangan" class="bg-gray-400 text-white px-4 py-2 rounded hidden">Batal</button>
                 </div>
             </div>
@@ -194,18 +252,19 @@
         <!-- HALAMAN: PERSURATAN                        -->
         <!-- ========================================== -->
         <div id="section-surat" class="hidden">
+            <!-- Modul Surat -->
             <div class="bg-white p-6 rounded-xl shadow border-l-4 border-yellow-500 mb-6">
                 <h2 class="text-xl font-bold text-yellow-700 mb-4" id="title-form-surat">Arsip Surat</h2>
                 <input type="hidden" id="edit-id-surat" value="">
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
                     <div><label class="font-bold text-xs">Tanggal</label><input type="date" id="tgl-surat" class="w-full p-2 border rounded font-bold"></div>
                     <div><label class="font-bold text-xs">Jenis</label><select id="jenis-surat" class="w-full p-2 border rounded"><option value="Masuk">Masuk</option><option value="Keluar">Keluar</option></select></div>
-                    <div><label class="font-bold text-xs">No Surat</label><input type="text" id="no-surat" placeholder="01/PD/2026" class="w-full p-2 border rounded"></div>
-                    <div><label class="font-bold text-xs">Asal/Tujuan</label><input type="text" id="asal-surat" placeholder="IPSI" class="w-full p-2 border rounded"></div>
+                    <div><label class="font-bold text-xs">No Surat</label><input type="text" id="no-surat" class="w-full p-2 border rounded"></div>
+                    <div><label class="font-bold text-xs">Asal/Tujuan</label><input type="text" id="asal-surat" class="w-full p-2 border rounded"></div>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                    <div class="col-span-2"><label class="font-bold text-xs">Perihal</label><input type="text" id="perihal-surat" placeholder="Undangan" class="w-full p-2 border rounded"></div>
-                    <div><label class="font-bold text-xs">Foto Surat (Opsional)</label><input type="file" id="foto-surat" accept="image/*" class="w-full p-1 border rounded text-xs"></div>
+                    <div class="col-span-2"><label class="font-bold text-xs">Perihal</label><input type="text" id="perihal-surat" class="w-full p-2 border rounded"></div>
+                    <div><label class="font-bold text-xs">Foto Surat</label><input type="file" id="foto-surat" accept="image/*" class="w-full p-1 border rounded text-xs"></div>
                 </div>
                 <div class="flex gap-2">
                     <button id="btn-simpan-surat" class="bg-yellow-500 text-white px-6 py-2 rounded font-bold shadow">Simpan Arsip</button>
@@ -229,12 +288,11 @@
         <div id="section-users" class="hidden">
             <div class="bg-white p-6 rounded-xl shadow border-l-4 border-purple-600 mb-6">
                 <div class="flex justify-between items-center mb-4 flex-wrap gap-2">
-                    <h2 class="text-xl font-bold text-purple-800">Manajemen Hak Akses Pengguna</h2>
+                    <h2 class="text-xl font-bold text-purple-800">Hak Akses Pengguna</h2>
                     <input type="text" id="search-users" placeholder="Cari nama/email..." class="p-2 border rounded text-sm w-40 md:w-64">
                 </div>
-                <p class="text-sm text-gray-500 mb-4">Hanya Admin Cabang yang dapat mengubah role/jabatan akun anggota lain.</p>
                 <div class="bg-white rounded border table-responsive">
-                    <table class="min-w-full text-left whitespace-nowrap"><thead class="bg-gray-100 text-gray-700"><tr><th class="p-3">Nama</th><th class="p-3">Email</th><th class="p-3">Role Saat Ini</th><th class="p-3 text-center">Ubah Akses (Role)</th></tr></thead><tbody id="tabel-users" class="divide-y divide-gray-200"></tbody></table>
+                    <table class="min-w-full text-left whitespace-nowrap"><thead class="bg-gray-100 text-gray-700"><tr><th class="p-3">Nama</th><th class="p-3">Email</th><th class="p-3">Role</th><th class="p-3 text-center">Ubah Akses</th></tr></thead><tbody id="tabel-users" class="divide-y divide-gray-200"></tbody></table>
                 </div>
                 <div id="pagination-users" class="flex justify-between items-center mt-4"></div>
             </div>
@@ -248,10 +306,7 @@
                 <h2 class="text-xl font-bold mb-6 text-center">Pengaturan Profil</h2>
                 <div class="flex justify-center mb-4"><img id="profil-foto" src="" class="w-24 h-24 rounded-full border-4 shadow"></div>
                 <div class="mb-4"><label class="font-bold text-xs">Email</label><input type="text" id="profil-email" class="w-full p-2 border rounded bg-gray-100" disabled></div>
-                <div class="mb-4">
-                    <label class="font-bold text-xs">Nama Lengkap Tampilan</label>
-                    <input type="text" id="profil-nama" class="w-full p-2 border rounded font-bold">
-                </div>
+                <div class="mb-4"><label class="font-bold text-xs">Nama Lengkap Tampilan</label><input type="text" id="profil-nama" class="w-full p-2 border rounded font-bold"></div>
                 <button id="btn-update-profil" class="w-full bg-gray-800 text-white px-4 py-2 rounded font-bold shadow">Update Nama</button>
             </div>
         </div>
@@ -287,6 +342,7 @@
 
         let currentUser = null; let currentUserRole = 'user';
         let state = {
+            jadwal: { data: [], page: 1, limit: 100, search: '' },
             siswa: { data: [], page: 1, limit: 10, search: '' },
             keuangan: { data: [], page: 1, limit: 10, search: '' },
             surat: { data: [], page: 1, limit: 10, search: '' },
@@ -318,14 +374,16 @@
             document.body.appendChild(a); a.click(); document.body.removeChild(a);
         }
 
-        // TAB & PAGINATION HELPERS
+        // ================== NAVIGASI & TAB ==================
         window.switchTab = (tab) => {
-            ['berita', 'siswa', 'absensi', 'keuangan', 'surat', 'users', 'profil'].forEach(s => document.getElementById(`section-${s}`).classList.add('hidden'));
+            ['utama', 'jadwal', 'siswa', 'absensi', 'keuangan', 'surat', 'users', 'profil'].forEach(s => document.getElementById(`section-${s}`).classList.add('hidden'));
             document.getElementById(`section-${tab}`).classList.remove('hidden');
             document.querySelectorAll('.tab-btn').forEach(b => { b.classList.remove('border-red-700', 'text-red-700'); b.classList.add('border-transparent', 'text-gray-500'); });
             const activeBtn = document.getElementById(`tab-${tab}`);
             if(activeBtn) { activeBtn.classList.remove('border-transparent', 'text-gray-500'); activeBtn.classList.add('border-red-700', 'text-red-700'); }
             
+            if(tab === 'utama') { fetchBerita(); loadJadwalPublik(); }
+            if(tab === 'jadwal') loadJadwalAdmin();
             if(tab === 'siswa') loadSiswa();
             if(tab === 'absensi') { loadSiswa().then(()=> loadFormAbsensi()); loadRiwayatAbsensi(); }
             if(tab === 'keuangan') loadKeuangan();
@@ -341,30 +399,22 @@
             if(st.page > totalPages) st.page = totalPages;
             
             const cont = document.getElementById(containerId);
-            cont.innerHTML = `
-                <span class="text-sm text-gray-500">Hal ${st.page} dari ${totalPages} | Total: ${filtered.length} data</span>
-                <div class="flex gap-1">
-                    <button id="prev-${modul}" class="px-3 py-1 bg-gray-200 rounded text-sm font-bold disabled:opacity-50">Prev</button>
-                    <button id="next-${modul}" class="px-3 py-1 bg-gray-200 rounded text-sm font-bold disabled:opacity-50">Next</button>
-                </div>`;
-            
-            document.getElementById(`prev-${modul}`).disabled = st.page === 1;
-            document.getElementById(`next-${modul}`).disabled = st.page === totalPages;
-            
-            document.getElementById(`prev-${modul}`).onclick = () => { st.page--; renderFunc(); };
-            document.getElementById(`next-${modul}`).onclick = () => { st.page++; renderFunc(); };
-            
+            if(cont) {
+                cont.innerHTML = `<span class="text-sm text-gray-500">Hal ${st.page} / ${totalPages} | Total: ${filtered.length}</span><div class="flex gap-1"><button id="prev-${modul}" class="px-3 py-1 bg-gray-200 rounded text-sm font-bold disabled:opacity-50">Prev</button><button id="next-${modul}" class="px-3 py-1 bg-gray-200 rounded text-sm font-bold disabled:opacity-50">Next</button></div>`;
+                document.getElementById(`prev-${modul}`).disabled = st.page === 1;
+                document.getElementById(`next-${modul}`).disabled = st.page === totalPages;
+                document.getElementById(`prev-${modul}`).onclick = () => { st.page--; renderFunc(); };
+                document.getElementById(`next-${modul}`).onclick = () => { st.page++; renderFunc(); };
+            }
             const start = (st.page - 1) * st.limit;
             return filtered.slice(start, start + st.limit);
         }
-
         function setupSearch(inputId, modul, renderFunc) {
-            document.getElementById(inputId).addEventListener('input', (e) => {
-                state[modul].search = e.target.value; state[modul].page = 1; renderFunc();
-            });
+            const el = document.getElementById(inputId);
+            if(el) el.addEventListener('input', (e) => { state[modul].search = e.target.value; state[modul].page = 1; renderFunc(); });
         }
 
-        // AUTH
+        // ================== AUTH (LOGIN) ==================
         document.getElementById('btn-login-google').addEventListener('click', async () => {
             try {
                 const res = await signInWithPopup(auth, provider);
@@ -387,16 +437,13 @@
                 
                 const userSnap = await getDoc(doc(db, 'users', user.uid));
                 let displayName = user.displayName;
-                if(userSnap.exists()){
-                    currentUserRole = userSnap.data().role || 'user';
-                    if(userSnap.data().nama) displayName = userSnap.data().nama;
-                } else currentUserRole = 'user';
+                if(userSnap.exists()){ currentUserRole = userSnap.data().role || 'user'; if(userSnap.data().nama) displayName = userSnap.data().nama; } else currentUserRole = 'user';
 
-                document.getElementById('welcome-text').textContent = "Halo, " + displayName.split(' ')[0] + ` (${currentUserRole})`;
+                document.getElementById('welcome-text').textContent = "Halo, " + displayName.split(' ')[0] + ` (${currentUserRole.replace('_', ' ')})`;
                 document.getElementById('welcome-text').classList.remove('hidden');
 
-                const isPelatihUp = ['admin_berita', 'admin_ranting', 'admin_cabang', 'pelatih'].includes(currentUserRole);
-                if (isPelatihUp) { document.getElementById('admin-tabs').classList.remove('hidden'); document.getElementById('dashboard-berita').classList.remove('hidden'); }
+                const isAdmin = ['admin_berita', 'admin_ranting', 'admin_cabang', 'pelatih'].includes(currentUserRole);
+                if (isAdmin) { document.getElementById('admin-tabs').classList.remove('hidden'); document.getElementById('dashboard-berita').classList.remove('hidden'); }
                 if (currentUserRole === 'admin_cabang') document.getElementById('tab-users').classList.remove('hidden'); else document.getElementById('tab-users').classList.add('hidden');
             } else {
                 document.getElementById('welcome-text').classList.add('hidden');
@@ -405,245 +452,191 @@
                 document.getElementById('btn-logout').classList.add('hidden');
                 document.getElementById('admin-tabs').classList.add('hidden');
                 document.getElementById('dashboard-berita').classList.add('hidden');
-                switchTab('berita');
             }
-            fetchBerita();
+            switchTab('utama'); 
         });
 
-        // ================== MODUL: USERS ==================
-        async function loadUsers() {
-            if(currentUserRole !== 'admin_cabang') return;
-            const snap = await getDocs(query(collection(db, "users"), orderBy("tanggal_daftar", "desc")));
-            state.users.data = []; snap.forEach(d => state.users.data.push({id: d.id, ...d.data()}));
-            renderUsers();
-        }
-        setupSearch('search-users', 'users', () => renderUsers());
-        window.renderUsers = () => {
-            const tbody = document.getElementById('tabel-users'); tbody.innerHTML = '';
-            const list = renderPagination('users', 'pagination-users', renderUsers);
-            if(list.length === 0) return tbody.innerHTML = '<tr><td colspan="4" class="p-3 text-center">Data tidak ditemukan.</td></tr>';
-            
-            list.forEach(d => {
-                const badge = d.role.includes('admin') ? 'bg-red-100 text-red-700' : (d.role==='pelatih'?'bg-blue-100 text-blue-700':'bg-gray-100 text-gray-700');
-                tbody.innerHTML += `
-                    <tr class="border-b hover:bg-gray-50">
-                        <td class="p-3 font-bold">${d.nama}</td><td class="p-3 text-sm">${d.email}</td>
-                        <td class="p-3"><span class="px-2 py-1 rounded text-xs font-bold ${badge}">${d.role}</span></td>
-                        <td class="p-3 text-center">
-                            <select onchange="window.ubahRole('${d.id}', this.value)" class="p-1 border rounded text-xs font-bold">
-                                <option value="" disabled selected>Ubah...</option>
-                                <option value="user">User Biasa</option>
-                                <option value="pelatih">Pelatih</option>
-                                <option value="admin_ranting">Admin Ranting</option>
-                                <option value="admin_cabang">Admin Cabang</option>
-                            </select>
-                        </td>
-                    </tr>`;
+        // ================== MODUL: JADWAL & LOKASI (BARU) ==================
+        const resetJadwal = () => { document.getElementById('edit-id-jadwal').value=''; document.getElementById('nama-ranting').value=''; document.getElementById('hari-latihan').value=''; document.getElementById('jam-latihan').value=''; document.getElementById('alamat-latihan').value=''; document.getElementById('link-maps').value=''; document.getElementById('btn-batal-jadwal').classList.add('hidden'); document.getElementById('title-form-jadwal').textContent="Tambah Jadwal Latihan"; };
+        document.getElementById('btn-batal-jadwal').addEventListener('click', resetJadwal);
+        document.getElementById('btn-simpan-jadwal').addEventListener('click', async () => {
+            const id=document.getElementById('edit-id-jadwal').value, r=document.getElementById('nama-ranting').value, h=document.getElementById('hari-latihan').value, j=document.getElementById('jam-latihan').value, a=document.getElementById('alamat-latihan').value, l=document.getElementById('link-maps').value;
+            if(!r||!h||!j) return showAlert("Lengkapi form jadwal!",false);
+            const dt = {ranting:r, hari:h, jam:j, alamat:a, link_maps:l, timestamp:serverTimestamp()};
+            if(id) await updateDoc(doc(db,"jadwal_latihan",id), dt); else await addDoc(collection(db,"jadwal_latihan"), dt);
+            showAlert("Jadwal Tersimpan!"); resetJadwal(); loadJadwalAdmin();
+        });
+        async function loadJadwalAdmin() {
+            const snap = await getDocs(query(collection(db, "jadwal_latihan"), orderBy("timestamp", "desc")));
+            state.jadwal.data = []; snap.forEach(d => state.jadwal.data.push({id: d.id, ...d.data()}));
+            const tbody = document.getElementById('tabel-jadwal'); tbody.innerHTML = '';
+            if(state.jadwal.data.length===0) return tbody.innerHTML = '<tr><td colspan="5" class="p-3 text-center">Belum ada jadwal.</td></tr>';
+            state.jadwal.data.forEach(d => {
+                const maps = d.link_maps ? `<a href="${d.link_maps}" target="_blank" class="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded font-bold">Buka</a>` : '-';
+                tbody.innerHTML += `<tr class="border-b hover:bg-gray-50"><td class="p-3 font-bold">${d.ranting}</td><td class="p-3 text-sm">${d.hari} <br> ${d.jam}</td><td class="p-3 text-sm">${d.alamat}</td><td class="p-3 text-center">${maps}</td><td class="p-3 text-center"><button onclick="window.edJadwal('${d.id}')" class="text-xs text-blue-500 mr-2">Edit</button><button onclick="window.hpJadwal('${d.id}')" class="text-xs text-red-500">Hps</button></td></tr>`;
             });
-        };
-        window.ubahRole = async (id, roleBaru) => {
-            if(confirm(`Ubah role pengguna ini menjadi ${roleBaru}?`)){
-                await updateDoc(doc(db, "users", id), { role: roleBaru }); showAlert("Hak akses diperbarui!"); loadUsers();
-            }
-        };
-
-        // ================== MODUL: PROFIL ==================
-        async function loadProfil() {
-            if(!currentUser) return;
-            document.getElementById('profil-foto').src = currentUser.photoURL || 'https://via.placeholder.com/100';
-            document.getElementById('profil-email').value = currentUser.email;
-            const snap = await getDoc(doc(db, 'users', currentUser.uid));
-            document.getElementById('profil-nama').value = (snap.exists() && snap.data().nama) ? snap.data().nama : currentUser.displayName;
         }
-        document.getElementById('btn-update-profil').addEventListener('click', async () => {
-            const newName = document.getElementById('profil-nama').value;
-            if(!newName) return showAlert("Nama kosong", false);
-            try {
-                await updateProfile(auth.currentUser, { displayName: newName });
-                await updateDoc(doc(db, 'users', currentUser.uid), { nama: newName });
-                document.getElementById('welcome-text').textContent = `Halo, ${newName.split(' ')[0]} (${currentUserRole})`;
-                showAlert("Profil Diperbarui!");
-            } catch(e) { showAlert("Gagal update profil", false); }
-        });
+        window.edJadwal = async(id) => { const d=await getDoc(doc(db,"jadwal_latihan",id)); if(d.exists()){ const t=d.data(); document.getElementById('edit-id-jadwal').value=id; document.getElementById('nama-ranting').value=t.ranting; document.getElementById('hari-latihan').value=t.hari; document.getElementById('jam-latihan').value=t.jam; document.getElementById('alamat-latihan').value=t.alamat; document.getElementById('link-maps').value=t.link_maps||''; document.getElementById('title-form-jadwal').textContent="Edit Jadwal"; document.getElementById('btn-batal-jadwal').classList.remove('hidden'); window.scrollTo({top:0}); }};
+        window.hpJadwal = async(id) => { if(confirm("Hapus jadwal?")){ await deleteDoc(doc(db,"jadwal_latihan",id)); loadJadwalAdmin(); }};
 
-        // ================== MODUL: BERITA ==================
-        const resetBerita = () => {
-            document.getElementById('edit-id-berita').value = ''; document.getElementById('judul-berita').value = '';
-            document.getElementById('tag-berita').value = ''; document.getElementById('foto-berita').value = '';
-            quill.setContents([]); document.getElementById('title-form-berita').textContent = 'Tulis Berita';
-            document.getElementById('btn-simpan-berita').textContent = 'Simpan'; document.getElementById('btn-batal-berita').classList.add('hidden');
-        };
+        // Render Jadwal di Halaman Publik
+        async function loadJadwalPublik() {
+            const cont = document.getElementById('jadwal-publik-container');
+            const snap = await getDocs(query(collection(db, "jadwal_latihan"), orderBy("timestamp", "asc")));
+            cont.innerHTML = snap.empty ? '<p class="text-gray-500 italic px-4">Jadwal belum tersedia.</p>' : '';
+            snap.forEach(d => {
+                const t=d.data();
+                const btnMaps = t.link_maps ? `<a href="${t.link_maps}" target="_blank" class="block text-center mt-3 bg-blue-50 text-blue-700 p-2 rounded font-bold border border-blue-200 hover:bg-blue-600 hover:text-white transition">🗺️ Buka di Peta</a>` : '';
+                cont.innerHTML += `<div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200 border-t-4 border-t-blue-500 hover:shadow-md transition">
+                    <h3 class="font-bold text-lg text-gray-800 mb-2">${t.ranting}</h3>
+                    <p class="text-sm text-gray-600 mb-1">📅 <span class="font-semibold">${t.hari}</span></p>
+                    <p class="text-sm text-gray-600 mb-1">⏰ <span class="font-semibold">${t.jam}</span></p>
+                    <p class="text-sm text-gray-600 mt-2 border-t pt-2">📍 ${t.alamat}</p>
+                    ${btnMaps}
+                </div>`;
+            });
+        }
+
+        // ================== SISANYA (BERITA, SISWA, ABSENSI, KAS, SURAT, USERS) ==================
+        // Kode di bawah ini sama persis fungsinya seperti pembaruan sebelumnya, 
+        // dengan tambahan sistem pencarian dan rendering yang telah dioptimalkan di fungsi `renderPagination`.
+
+        // Berita
+        const resetBerita=()=>{document.getElementById('edit-id-berita').value=''; document.getElementById('judul-berita').value=''; document.getElementById('tag-berita').value=''; document.getElementById('foto-berita').value=''; quill.setContents([]); document.getElementById('title-form-berita').textContent='Tulis Berita'; document.getElementById('btn-simpan-berita').textContent='Simpan'; document.getElementById('btn-batal-berita').classList.add('hidden');};
         document.getElementById('btn-batal-berita').addEventListener('click', resetBerita);
-        
-        document.getElementById('btn-simpan-berita').addEventListener('click', async () => {
-            const id = document.getElementById('edit-id-berita').value; const jud = document.getElementById('judul-berita').value;
-            const isi = quill.root.innerHTML; const file = document.getElementById('foto-berita').files[0];
-            if(!jud || quill.getText().trim().length===0) return showAlert("Isi form!", false);
-            const btn = document.getElementById('btn-simpan-berita'); btn.disabled = true; btn.textContent="Menyimpan...";
-            try {
-                let url = ""; if(file) url = await uploadToImgBB(file);
-                const dt = { judul: jud, tag: document.getElementById('tag-berita').value, isi, status: document.getElementById('status-berita').value, penulis: currentUser.displayName, tanggal: new Date().toLocaleDateString('id-ID') };
-                if(url) dt.fotoUrl = url;
-                if(id){ dt.diperbarui=serverTimestamp(); await updateDoc(doc(db, "berita", id), dt); } else { dt.timestamp=serverTimestamp(); await addDoc(collection(db, "berita"), dt); }
-                resetBerita(); fetchBerita(); showAlert("Berita tersimpan!");
-            } catch(e) { showAlert("Gagal", false); }
-            btn.disabled = false; btn.textContent="Simpan";
+        document.getElementById('btn-simpan-berita').addEventListener('click', async()=>{
+            const id=document.getElementById('edit-id-berita').value, jud=document.getElementById('judul-berita').value, isi=quill.root.innerHTML, file=document.getElementById('foto-berita').files[0];
+            if(!jud||quill.getText().trim().length===0) return showAlert("Isi form!",false);
+            const btn=document.getElementById('btn-simpan-berita'); btn.disabled=true; btn.textContent="Menyimpan...";
+            try { let url=""; if(file) url=await uploadToImgBB(file);
+                const dt={judul:jud, tag:document.getElementById('tag-berita').value, isi, status:document.getElementById('status-berita').value, penulis:currentUser.displayName, tanggal:new Date().toLocaleDateString('id-ID')}; if(url) dt.fotoUrl=url;
+                if(id){ dt.diperbarui=serverTimestamp(); await updateDoc(doc(db,"berita",id),dt); }else{ dt.timestamp=serverTimestamp(); await addDoc(collection(db,"berita"),dt); }
+                resetBerita(); fetchBerita(); showAlert("Tersimpan!");
+            }catch(e){showAlert("Gagal",false);} btn.disabled=false; btn.textContent="Simpan";
         });
-
-        async function fetchBerita() {
-            const snap = await getDocs(query(collection(db, "berita"), orderBy("timestamp", "desc")));
-            state.berita.data = []; snap.forEach(d => state.berita.data.push({id: d.id, ...d.data()}));
-            renderBerita();
-        }
-        setupSearch('search-berita', 'berita', () => renderBerita());
-        window.renderBerita = () => {
-            const cont = document.getElementById('berita-container'); cont.innerHTML = '';
-            const list = renderPagination('berita', 'pagination-berita', renderBerita);
-            if(list.length===0) return cont.innerHTML = '<p class="text-gray-500 italic">Tidak ada berita.</p>';
-            list.forEach(d => {
-                if(d.status==='draft' && !['admin_berita', 'admin_ranting', 'admin_cabang', 'pelatih'].includes(currentUserRole)) return;
-                const draft = d.status==='draft' ? `<span class="bg-yellow-500 text-white text-xs px-1 rounded">DRAFT</span>` : '';
-                const btnEdit = ['admin_berita', 'admin_ranting', 'admin_cabang', 'pelatih'].includes(currentUserRole) ? `<div class="mt-2 border-t pt-2"><button onclick="window.editBerita('${d.id}')" class="text-xs text-blue-600 mr-2">Edit</button><button onclick="window.hpsBerita('${d.id}')" class="text-xs text-red-600">Hapus</button></div>` : '';
-                cont.innerHTML += `<div class="bg-white border rounded-xl overflow-hidden shadow-sm p-4 flex flex-col justify-between">
-                    <div>
-                        ${d.fotoUrl ? `<img src="${d.fotoUrl}" class="w-full h-32 object-cover mb-2 rounded">` : ''}
-                        <h3 class="font-bold text-lg">${d.judul} ${draft}</h3>
-                        <p class="text-xs text-gray-500 mb-2">${d.tanggal} | ${d.penulis}</p>
-                        <div class="text-sm prose line-clamp-3">${d.isi}</div>
-                    </div> ${btnEdit}</div>`;
+        async function fetchBerita(){ const snap=await getDocs(query(collection(db,"berita"), orderBy("timestamp","desc"))); state.berita.data=[]; snap.forEach(d=>state.berita.data.push({id:d.id, ...d.data()})); renderBerita(); }
+        setupSearch('search-berita','berita',()=>renderBerita());
+        window.renderBerita=()=>{
+            const cont=document.getElementById('berita-container'); cont.innerHTML=''; const list=renderPagination('berita','pagination-berita',renderBerita);
+            if(list.length===0) return cont.innerHTML='<p class="text-gray-500 italic">Tidak ada berita.</p>';
+            list.forEach(d=>{
+                if(d.status==='draft' && !['admin_berita','admin_ranting','admin_cabang','pelatih'].includes(currentUserRole)) return;
+                const draft=d.status==='draft'?`<span class="bg-yellow-500 text-white text-xs px-1 rounded">DRAFT</span>`:'';
+                const btnEdit=['admin_berita','admin_ranting','admin_cabang','pelatih'].includes(currentUserRole)?`<div class="mt-2 border-t pt-2"><button onclick="window.editBerita('${d.id}')" class="text-xs text-blue-600 mr-2">Edit</button><button onclick="window.hpsBerita('${d.id}')" class="text-xs text-red-600">Hapus</button></div>`:'';
+                cont.innerHTML+=`<div class="bg-white border rounded-xl overflow-hidden shadow-sm p-4 flex flex-col justify-between"><div>${d.fotoUrl?`<img src="${d.fotoUrl}" class="w-full h-32 object-cover mb-2 rounded">`:''}<h3 class="font-bold text-lg">${d.judul} ${draft}</h3><p class="text-xs text-gray-500 mb-2">${d.tanggal} | ${d.penulis}</p><div class="text-sm prose line-clamp-3">${d.isi}</div></div> ${btnEdit}</div>`;
             });
         };
-        window.editBerita = async (id) => {
-            const d = await getDoc(doc(db,"berita",id)); if(d.exists()){ const t=d.data();
-            document.getElementById('edit-id-berita').value=id; document.getElementById('judul-berita').value=t.judul; document.getElementById('tag-berita').value=t.tag; document.getElementById('status-berita').value=t.status; quill.root.innerHTML=t.isi;
-            document.getElementById('title-form-berita').textContent="Edit Berita"; document.getElementById('btn-batal-berita').classList.remove('hidden'); window.scrollTo({top:0}); }
-        };
-        window.hpsBerita = async (id) => { if(confirm("Hapus?")){ await deleteDoc(doc(db,"berita",id)); fetchBerita(); }};
+        window.editBerita=async(id)=>{const d=await getDoc(doc(db,"berita",id));if(d.exists()){const t=d.data();document.getElementById('edit-id-berita').value=id;document.getElementById('judul-berita').value=t.judul;document.getElementById('tag-berita').value=t.tag;document.getElementById('status-berita').value=t.status;quill.root.innerHTML=t.isi;document.getElementById('title-form-berita').textContent="Edit Berita";document.getElementById('btn-batal-berita').classList.remove('hidden');window.scrollTo({top:0});}};
+        window.hpsBerita=async(id)=>{if(confirm("Hapus?")){await deleteDoc(doc(db,"berita",id));fetchBerita();}};
 
-        // ================== MODUL: SISWA ==================
-        const resetSiswa = () => { document.getElementById('edit-id-siswa').value=''; document.getElementById('nama-siswa').value=''; document.getElementById('sabuk-siswa').value=''; document.getElementById('ranting-siswa').value=''; document.getElementById('btn-batal-siswa').classList.add('hidden'); document.getElementById('title-form-siswa').textContent="Form Siswa"; };
+        // Siswa
+        const resetSiswa=()=>{document.getElementById('edit-id-siswa').value=''; document.getElementById('nama-siswa').value=''; document.getElementById('sabuk-siswa').value=''; document.getElementById('ranting-siswa').value=''; document.getElementById('btn-batal-siswa').classList.add('hidden'); document.getElementById('title-form-siswa').textContent="Form Siswa";};
         document.getElementById('btn-batal-siswa').addEventListener('click', resetSiswa);
-        document.getElementById('btn-simpan-siswa').addEventListener('click', async () => {
+        document.getElementById('btn-simpan-siswa').addEventListener('click', async()=>{
             const id=document.getElementById('edit-id-siswa').value, n=document.getElementById('nama-siswa').value, s=document.getElementById('sabuk-siswa').value, r=document.getElementById('ranting-siswa').value;
             if(!n||!s||!r) return showAlert("Lengkapi form!",false);
             if(id) await updateDoc(doc(db,"siswa",id),{nama:n, sabuk:s, ranting:r}); else await addDoc(collection(db,"siswa"),{nama:n, sabuk:s, ranting:r, timestamp:serverTimestamp()});
             showAlert("Tersimpan!"); resetSiswa(); loadSiswa();
         });
-        async function loadSiswa() {
-            const snap = await getDocs(query(collection(db, "siswa"), orderBy("nama", "asc")));
-            state.siswa.data = []; snap.forEach(d => state.siswa.data.push({id: d.id, ...d.data()})); renderSiswa();
-        }
-        setupSearch('search-siswa', 'siswa', () => renderSiswa());
-        window.renderSiswa = () => {
-            const tbody = document.getElementById('tabel-siswa'); tbody.innerHTML = '';
-            const list = renderPagination('siswa', 'pagination-siswa', renderSiswa);
-            if(list.length===0) return tbody.innerHTML = '<tr><td colspan="4" class="p-3 text-center">Data kosong.</td></tr>';
-            list.forEach(d => { tbody.innerHTML += `<tr class="border-b hover:bg-gray-50"><td class="p-3 font-bold">${d.nama}</td><td class="p-3">${d.sabuk}</td><td class="p-3">${d.ranting}</td><td class="p-3 text-center"><button onclick="window.edSiswa('${d.id}','${d.nama}','${d.sabuk}','${d.ranting}')" class="text-xs text-blue-500 mr-2">Edit</button><button onclick="window.hpSiswa('${d.id}')" class="text-xs text-red-500">Hapus</button></td></tr>`; });
+        async function loadSiswa(){const snap=await getDocs(query(collection(db,"siswa"), orderBy("nama","asc"))); state.siswa.data=[]; snap.forEach(d=>state.siswa.data.push({id:d.id, ...d.data()})); renderSiswa();}
+        setupSearch('search-siswa','siswa',()=>renderSiswa());
+        window.renderSiswa=()=>{
+            const tbody=document.getElementById('tabel-siswa'); tbody.innerHTML=''; const list=renderPagination('siswa','pagination-siswa',renderSiswa);
+            if(list.length===0) return tbody.innerHTML='<tr><td colspan="4" class="p-3 text-center">Data kosong.</td></tr>';
+            list.forEach(d=>{tbody.innerHTML+=`<tr class="border-b hover:bg-gray-50"><td class="p-3 font-bold">${d.nama}</td><td class="p-3">${d.sabuk}</td><td class="p-3">${d.ranting}</td><td class="p-3 text-center"><button onclick="window.edSiswa('${d.id}','${d.nama}','${d.sabuk}','${d.ranting}')" class="text-xs text-blue-500 mr-2">Edit</button><button onclick="window.hpSiswa('${d.id}')" class="text-xs text-red-500">Hps</button></td></tr>`;});
         };
-        window.edSiswa = (id,n,s,r) => { document.getElementById('edit-id-siswa').value=id; document.getElementById('nama-siswa').value=n; document.getElementById('sabuk-siswa').value=s; document.getElementById('ranting-siswa').value=r; document.getElementById('btn-batal-siswa').classList.remove('hidden'); document.getElementById('title-form-siswa').textContent="Edit Siswa"; window.scrollTo({top:0}); };
-        window.hpSiswa = async (id) => { if(confirm("Hapus?")){ await deleteDoc(doc(db,"siswa",id)); loadSiswa(); }};
+        window.edSiswa=(id,n,s,r)=>{document.getElementById('edit-id-siswa').value=id; document.getElementById('nama-siswa').value=n; document.getElementById('sabuk-siswa').value=s; document.getElementById('ranting-siswa').value=r; document.getElementById('btn-batal-siswa').classList.remove('hidden'); document.getElementById('title-form-siswa').textContent="Edit Siswa"; window.scrollTo({top:0});};
+        window.hpSiswa=async(id)=>{if(confirm("Hapus?")){await deleteDoc(doc(db,"siswa",id));loadSiswa();}};
+        document.getElementById('btn-export-siswa').addEventListener('click',()=>{let csv="Nama,Tingkatan,Ranting\n"; state.siswa.data.forEach(s=>{csv+=`"${s.nama}","${s.sabuk}","${s.ranting}"\n`;}); downloadCSV(csv,'Siswa.csv');});
+        document.getElementById('file-import-siswa').addEventListener('change',(e)=>{const f=e.target.files[0];if(!f)return; const r=new FileReader(); r.onload=async(ev)=>{const lines=ev.target.result.split('\n'); let c=0; showAlert("Impor...",true); for(let i=1;i<lines.length;i++){const d=lines[i].split(','); if(d.length>=3&&d[0].trim()){await addDoc(collection(db,"siswa"),{nama:d[0].replace(/"/g,'').trim(),sabuk:d[1].replace(/"/g,'').trim(),ranting:d[2].replace(/"/g,'').trim(),timestamp:serverTimestamp()});c++;}} showAlert(`Impor ${c} sukses!`); loadSiswa(); e.target.value='';}; r.readAsText(f);});
 
-        // ================== MODUL: ABSENSI ==================
-        const resetAbsen = () => { document.getElementById('edit-id-absen').value=''; document.getElementById('materi-latihan').value=''; document.getElementById('foto-latihan').value=''; document.getElementById('btn-batal-absen').classList.add('hidden'); document.getElementById('title-form-absen').textContent="Form Absensi"; loadFormAbsensi(); };
+        // Absensi & Latihan (Minimalist rendering)
+        document.getElementById('tanggal-absen').valueAsDate=new Date();
+        const resetAbsen=()=>{document.getElementById('edit-id-absen').value=''; document.getElementById('materi-latihan').value=''; document.getElementById('foto-latihan').value=''; document.getElementById('btn-batal-absen').classList.add('hidden'); document.getElementById('title-form-absen').textContent="Form Absensi"; loadFormAbsensi();};
         document.getElementById('btn-batal-absen').addEventListener('click', resetAbsen);
         document.getElementById('search-absen-input').addEventListener('input', (e) => loadFormAbsensi(null, e.target.value));
-
-        async function loadFormAbsensi(exData=null, filter='') {
-            const tbody = document.getElementById('tabel-absensi'); tbody.innerHTML = '';
-            let list = state.siswa.data;
-            if(filter) list = list.filter(s => s.nama.toLowerCase().includes(filter.toLowerCase()));
-            list.forEach(s => {
-                let st = 'Hadir'; if(exData) { const f=exData.find(k=>k.siswa_id===s.id); if(f) st=f.status; }
-                tbody.innerHTML += `<tr class="border-b"><td class="p-2 w-1/3"><div class="font-bold text-sm">${s.nama}</div><div class="text-xs text-gray-500">${s.sabuk}</div></td><td class="p-2 w-2/3"><div class="flex gap-1 text-xs font-bold"><label class="cursor-pointer flex-1 text-center"><input type="radio" name="abs_${s.id}" value="Hadir" ${st==='Hadir'?'checked':''} class="peer sr-only"><div class="p-1 border rounded peer-checked:bg-green-500 peer-checked:text-white">Hadir</div></label><label class="cursor-pointer flex-1 text-center"><input type="radio" name="abs_${s.id}" value="Sakit" ${st==='Sakit'?'checked':''} class="peer sr-only"><div class="p-1 border rounded peer-checked:bg-yellow-400 peer-checked:text-white">Sakit</div></label><label class="cursor-pointer flex-1 text-center"><input type="radio" name="abs_${s.id}" value="Izin" ${st==='Izin'?'checked':''} class="peer sr-only"><div class="p-1 border rounded peer-checked:bg-blue-400 peer-checked:text-white">Izin</div></label><label class="cursor-pointer flex-1 text-center"><input type="radio" name="abs_${s.id}" value="Alpha" ${st==='Alpha'?'checked':''} class="peer sr-only"><div class="p-1 border rounded peer-checked:bg-red-500 peer-checked:text-white">Alpha</div></label></div></td></tr>`;
+        async function loadFormAbsensi(exData=null, filter=''){
+            const tbody=document.getElementById('tabel-absensi'); tbody.innerHTML=''; let list=state.siswa.data;
+            if(filter) list=list.filter(s=>s.nama.toLowerCase().includes(filter.toLowerCase()));
+            list.forEach(s=>{let st='Hadir'; if(exData){const f=exData.find(k=>k.siswa_id===s.id);if(f)st=f.status;}
+                tbody.innerHTML+=`<tr class="border-b"><td class="p-2 w-1/3"><div class="font-bold text-sm">${s.nama}</div><div class="text-xs text-gray-500">${s.sabuk}</div></td><td class="p-2 w-2/3"><div class="flex gap-1 text-xs font-bold"><label class="cursor-pointer flex-1 text-center"><input type="radio" name="abs_${s.id}" value="Hadir" ${st==='Hadir'?'checked':''} class="peer sr-only"><div class="p-1 border rounded peer-checked:bg-green-500 peer-checked:text-white">Hadir</div></label><label class="cursor-pointer flex-1 text-center"><input type="radio" name="abs_${s.id}" value="Sakit" ${st==='Sakit'?'checked':''} class="peer sr-only"><div class="p-1 border rounded peer-checked:bg-yellow-400 peer-checked:text-white">Sakit</div></label><label class="cursor-pointer flex-1 text-center"><input type="radio" name="abs_${s.id}" value="Izin" ${st==='Izin'?'checked':''} class="peer sr-only"><div class="p-1 border rounded peer-checked:bg-blue-400 peer-checked:text-white">Izin</div></label><label class="cursor-pointer flex-1 text-center"><input type="radio" name="abs_${s.id}" value="Alpha" ${st==='Alpha'?'checked':''} class="peer sr-only"><div class="p-1 border rounded peer-checked:bg-red-500 peer-checked:text-white">Alpha</div></label></div></td></tr>`;
             });
         }
-        document.getElementById('btn-simpan-absen').addEventListener('click', async () => {
+        document.getElementById('btn-simpan-absen').addEventListener('click', async()=>{
             const id=document.getElementById('edit-id-absen').value, t=document.getElementById('tanggal-absen').value, m=document.getElementById('materi-latihan').value, f=document.getElementById('foto-latihan').files[0];
-            if(!t) return showAlert("Pilih tanggal!",false);
-            let rek=[]; state.siswa.data.forEach(s=>{ const o=document.querySelector(`input[name="abs_${s.id}"]:checked`); rek.push({siswa_id:s.id, nama:s.nama, status:o?o.value:"Alpha"}); });
+            if(!t) return showAlert("Pilih tanggal!",false); let rek=[]; state.siswa.data.forEach(s=>{const o=document.querySelector(`input[name="abs_${s.id}"]:checked`); rek.push({siswa_id:s.id, nama:s.nama, status:o?o.value:"Alpha"});});
             const btn=document.getElementById('btn-simpan-absen'); btn.disabled=true; btn.textContent="Loading...";
-            try { let url=""; if(f) url = await uploadToImgBB(f);
-                const dt = {tanggal:t, materi:m, pencatat:currentUser.displayName, data_kehadiran:rek}; if(url) dt.fotoUrl=url;
-                if(id) await updateDoc(doc(db,"absensi",id), dt); else { dt.timestamp=serverTimestamp(); await addDoc(collection(db,"absensi"),dt); }
-                resetAbsen(); loadRiwayatAbsensi(); showAlert("Disimpan!");
-            } catch(e){ showAlert("Gagal",false); } btn.disabled=false; btn.textContent="Simpan";
+            try { let url=""; if(f) url=await uploadToImgBB(f); const dt={tanggal:t, materi:m, pencatat:currentUser.displayName, data_kehadiran:rek}; if(url) dt.fotoUrl=url;
+                if(id) await updateDoc(doc(db,"absensi",id), dt); else {dt.timestamp=serverTimestamp(); await addDoc(collection(db,"absensi"),dt);}
+                resetAbsen(); loadRiwayatAbsensi(); showAlert("Disimpan!"); }catch(e){showAlert("Gagal",false);} btn.disabled=false; btn.textContent="Simpan";
         });
-        async function loadRiwayatAbsensi() {
-            const snap = await getDocs(query(collection(db, "absensi"), orderBy("tanggal", "desc")));
-            state.absenRiwayat.data = []; snap.forEach(d => state.absenRiwayat.data.push({id: d.id, ...d.data()})); renderRiwayatAbsensi();
-        }
-        setupSearch('search-riwayat-absen', 'absenRiwayat', () => renderRiwayatAbsensi());
-        window.renderRiwayatAbsensi = () => {
-            const cont = document.getElementById('riwayat-absensi-container'); cont.innerHTML = '';
-            const list = renderPagination('absenRiwayat', 'pagination-riwayat-absen', renderRiwayatAbsensi);
-            list.forEach(d => {
-                let h=0,s=0,i=0,a=0; d.data_kehadiran.forEach(k=>{if(k.status==='Hadir')h++; else if(k.status==='Sakit')s++; else if(k.status==='Izin')i++; else a++;});
-                cont.innerHTML += `<div class="bg-white border rounded-xl p-4 shadow-sm"><div class="flex justify-between font-bold mb-1"><span class="text-green-700">📅 ${d.tanggal}</span><div><button onclick="window.edAbsen('${d.id}')" class="text-xs text-blue-500 mr-2">Edit</button><button onclick="window.hpAbsen('${d.id}')" class="text-xs text-red-500">Hps</button></div></div><div class="text-xs text-gray-500 mb-2">Pencatat: ${d.pencatat}</div><div class="text-xs bg-gray-50 p-2 rounded mb-2 border truncate">${d.materi||'-'}</div><div class="flex gap-1 text-xs font-bold text-center"><div class="flex-1 bg-green-100 text-green-700 p-1">H:${h}</div><div class="flex-1 bg-yellow-100 text-yellow-700 p-1">S:${s}</div><div class="flex-1 bg-blue-100 text-blue-700 p-1">I:${i}</div><div class="flex-1 bg-red-100 text-red-700 p-1">A:${a}</div></div>${d.fotoUrl?`<img src="${d.fotoUrl}" class="mt-2 h-20 object-cover w-full rounded">`:''}</div>`;
+        async function loadRiwayatAbsensi(){const snap=await getDocs(query(collection(db,"absensi"), orderBy("tanggal","desc"))); state.absenRiwayat.data=[]; snap.forEach(d=>state.absenRiwayat.data.push({id:d.id, ...d.data()})); renderRiwayatAbsensi();}
+        setupSearch('search-riwayat-absen','absenRiwayat',()=>renderRiwayatAbsensi());
+        window.renderRiwayatAbsensi=()=>{
+            const cont=document.getElementById('riwayat-absensi-container'); cont.innerHTML=''; const list=renderPagination('absenRiwayat','pagination-riwayat-absen',renderRiwayatAbsensi);
+            list.forEach(d=>{let h=0,s=0,i=0,a=0; d.data_kehadiran.forEach(k=>{if(k.status==='Hadir')h++;else if(k.status==='Sakit')s++;else if(k.status==='Izin')i++;else a++;});
+                cont.innerHTML+=`<div class="bg-white border rounded-xl p-4 shadow-sm"><div class="flex justify-between font-bold mb-1"><span class="text-green-700">📅 ${d.tanggal}</span><div><button onclick="window.edAbsen('${d.id}')" class="text-xs text-blue-500 mr-2">Edit</button><button onclick="window.hpAbsen('${d.id}')" class="text-xs text-red-500">Hps</button></div></div><div class="text-xs text-gray-500 mb-2">Oleh: ${d.pencatat}</div><div class="text-xs bg-gray-50 p-2 rounded mb-2 border truncate">${d.materi||'-'}</div><div class="flex gap-1 text-xs font-bold text-center"><div class="flex-1 bg-green-100 text-green-700 p-1">H:${h}</div><div class="flex-1 bg-yellow-100 text-yellow-700 p-1">S:${s}</div><div class="flex-1 bg-blue-100 text-blue-700 p-1">I:${i}</div><div class="flex-1 bg-red-100 text-red-700 p-1">A:${a}</div></div>${d.fotoUrl?`<img src="${d.fotoUrl}" class="mt-2 h-20 object-cover w-full rounded">`:''}</div>`;
             });
         };
-        window.edAbsen=async(id)=>{const d=await getDoc(doc(db,"absensi",id)); if(d.exists()){const t=d.data(); document.getElementById('edit-id-absen').value=id; document.getElementById('tanggal-absen').value=t.tanggal; document.getElementById('materi-latihan').value=t.materi||''; document.getElementById('btn-batal-absen').classList.remove('hidden'); document.getElementById('title-form-absen').textContent="Edit Absensi"; loadFormAbsensi(t.data_kehadiran); window.scrollTo({top:0});}};
-        window.hpAbsen=async(id)=>{if(confirm("Hapus?")){await deleteDoc(doc(db,"absensi",id)); loadRiwayatAbsensi();}};
+        window.edAbsen=async(id)=>{const d=await getDoc(doc(db,"absensi",id));if(d.exists()){const t=d.data(); document.getElementById('edit-id-absen').value=id; document.getElementById('tanggal-absen').value=t.tanggal; document.getElementById('materi-latihan').value=t.materi||''; document.getElementById('btn-batal-absen').classList.remove('hidden'); document.getElementById('title-form-absen').textContent="Edit Absensi"; loadFormAbsensi(t.data_kehadiran); window.scrollTo({top:0});}};
+        window.hpAbsen=async(id)=>{if(confirm("Hapus?")){await deleteDoc(doc(db,"absensi",id));loadRiwayatAbsensi();}};
 
-        // ================== MODUL: KEUANGAN ==================
-        const resetKas = () => { document.getElementById('edit-id-keuangan').value=''; document.getElementById('nominal-kas').value=''; document.getElementById('ket-kas').value=''; document.getElementById('link-kas').value=''; document.getElementById('btn-batal-keuangan').classList.add('hidden'); document.getElementById('title-form-keuangan').textContent="Catat Transaksi"; };
+        // Keuangan
+        const resetKas=()=>{document.getElementById('edit-id-keuangan').value=''; document.getElementById('nominal-kas').value=''; document.getElementById('ket-kas').value=''; document.getElementById('link-kas').value=''; document.getElementById('btn-batal-keuangan').classList.add('hidden'); document.getElementById('title-form-keuangan').textContent="Catat Transaksi";};
         document.getElementById('btn-batal-keuangan').addEventListener('click', resetKas);
-        document.getElementById('btn-simpan-keuangan').addEventListener('click', async () => {
+        document.getElementById('btn-simpan-keuangan').addEventListener('click', async()=>{
             const id=document.getElementById('edit-id-keuangan').value, t=document.getElementById('tgl-kas').value, j=document.getElementById('jenis-kas').value, n=parseInt(document.getElementById('nominal-kas').value), k=document.getElementById('ket-kas').value, l=document.getElementById('link-kas').value;
-            if(!t||!n||!k) return showAlert("Isi form kas!",false);
-            const dt = {tanggal:t, jenis:j, nominal:n, keterangan:k, link:l, pencatat:currentUser.displayName};
-            if(id) await updateDoc(doc(db,"keuangan",id), dt); else { dt.timestamp=serverTimestamp(); await addDoc(collection(db,"keuangan"), dt); }
+            if(!t||!n||!k) return showAlert("Isi form kas!",false); const dt={tanggal:t, jenis:j, nominal:n, keterangan:k, link:l, pencatat:currentUser.displayName};
+            if(id) await updateDoc(doc(db,"keuangan",id), dt); else {dt.timestamp=serverTimestamp(); await addDoc(collection(db,"keuangan"), dt);}
             resetKas(); loadKeuangan(); showAlert("Tersimpan!");
         });
-        async function loadKeuangan() {
-            const snap = await getDocs(query(collection(db, "keuangan"), orderBy("tanggal", "desc")));
-            state.keuangan.data = []; let saldo = 0;
-            snap.forEach(d => { const dt=d.data(); state.keuangan.data.push({id: d.id, ...dt}); if(dt.jenis==='Masuk') saldo+=dt.nominal; else saldo-=dt.nominal; });
-            document.getElementById('total-saldo').textContent = `Rp ${saldo.toLocaleString('id-ID')}`; renderKeuangan();
-        }
-        setupSearch('search-kas', 'keuangan', () => renderKeuangan());
-        window.renderKeuangan = () => {
-            const tbody = document.getElementById('tabel-keuangan'); tbody.innerHTML = '';
-            const list = renderPagination('keuangan', 'pagination-keuangan', renderKeuangan);
-            if(list.length===0) return tbody.innerHTML = '<tr><td colspan="6" class="p-3 text-center">Data kosong.</td></tr>';
-            list.forEach(d => {
-                const bkti = d.link ? `<a href="${d.link}" target="_blank" class="text-xs bg-indigo-100 text-indigo-700 px-2 py-1 rounded font-bold">Buka</a>` : '-';
-                tbody.innerHTML += `<tr class="border-b font-semibold hover:bg-gray-50"><td class="p-3 text-sm">${d.tanggal}</td><td class="p-3 text-sm">${d.keterangan}</td><td class="p-3 text-right text-green-600">${d.jenis==='Masuk'?d.nominal.toLocaleString('id-ID'):'-'}</td><td class="p-3 text-right text-red-600">${d.jenis==='Keluar'?d.nominal.toLocaleString('id-ID'):'-'}</td><td class="p-3 text-center">${bkti}</td><td class="p-3 text-center"><button onclick="window.edKas('${d.id}','${d.tanggal}','${d.jenis}',${d.nominal},'${d.keterangan}','${d.link||''}')" class="text-xs text-blue-500 mr-2">Edit</button><button onclick="window.hpKas('${d.id}')" class="text-xs text-red-500">Hps</button></td></tr>`;
-            });
+        async function loadKeuangan(){const snap=await getDocs(query(collection(db,"keuangan"), orderBy("tanggal","desc"))); state.keuangan.data=[]; let saldo=0; snap.forEach(d=>{const dt=d.data(); state.keuangan.data.push({id:d.id, ...dt}); if(dt.jenis==='Masuk') saldo+=dt.nominal; else saldo-=dt.nominal;}); document.getElementById('total-saldo').textContent=`Rp ${saldo.toLocaleString('id-ID')}`; renderKeuangan();}
+        setupSearch('search-kas','keuangan',()=>renderKeuangan());
+        window.renderKeuangan=()=>{
+            const tbody=document.getElementById('tabel-keuangan'); tbody.innerHTML=''; const list=renderPagination('keuangan','pagination-keuangan',renderKeuangan);
+            if(list.length===0) return tbody.innerHTML='<tr><td colspan="6" class="p-3 text-center">Data kosong.</td></tr>';
+            list.forEach(d=>{const bkti=d.link?`<a href="${d.link}" target="_blank" class="text-xs bg-indigo-100 text-indigo-700 px-2 py-1 rounded font-bold">Lihat</a>`:'-'; tbody.innerHTML+=`<tr class="border-b font-semibold hover:bg-gray-50"><td class="p-3 text-sm">${d.tanggal}</td><td class="p-3 text-sm">${d.keterangan}</td><td class="p-3 text-right text-green-600">${d.jenis==='Masuk'?d.nominal.toLocaleString('id-ID'):'-'}</td><td class="p-3 text-right text-red-600">${d.jenis==='Keluar'?d.nominal.toLocaleString('id-ID'):'-'}</td><td class="p-3 text-center">${bkti}</td><td class="p-3 text-center"><button onclick="window.edKas('${d.id}','${d.tanggal}','${d.jenis}',${d.nominal},'${d.keterangan}','${d.link||''}')" class="text-xs text-blue-500 mr-2">Edit</button><button onclick="window.hpKas('${d.id}')" class="text-xs text-red-500">Hps</button></td></tr>`;});
         };
-        window.edKas=(id,t,j,n,k,l)=>{document.getElementById('edit-id-keuangan').value=id; document.getElementById('tgl-kas').value=t; document.getElementById('jenis-kas').value=j; document.getElementById('nominal-kas').value=n; document.getElementById('ket-kas').value=k; document.getElementById('link-kas').value=l; document.getElementById('btn-batal-keuangan').classList.remove('hidden'); document.getElementById('title-form-keuangan').textContent="Edit Kas"; window.scrollTo({top:0});};
-        window.hpKas=async(id)=>{if(confirm("Hapus?")){await deleteDoc(doc(db,"keuangan",id)); loadKeuangan();}};
+        window.edKas=(id,t,j,n,k,l)=>{document.getElementById('edit-id-keuangan').value=id;document.getElementById('tgl-kas').value=t;document.getElementById('jenis-kas').value=j;document.getElementById('nominal-kas').value=n;document.getElementById('ket-kas').value=k;document.getElementById('link-kas').value=l;document.getElementById('btn-batal-keuangan').classList.remove('hidden');document.getElementById('title-form-keuangan').textContent="Edit Kas";window.scrollTo({top:0});};
+        window.hpKas=async(id)=>{if(confirm("Hapus?")){await deleteDoc(doc(db,"keuangan",id));loadKeuangan();}};
+        document.getElementById('btn-export-kas').addEventListener('click',()=>{let csv="Tgl,Jenis,Nominal,Ket\n"; state.keuangan.data.forEach(k=>{csv+=`"${k.tanggal}","${k.jenis}","${k.nominal}","${k.keterangan}"\n`;}); downloadCSV(csv,'Kas.csv');});
 
-        // ================== MODUL: SURAT ==================
-        const resetSurat = () => { document.getElementById('edit-id-surat').value=''; document.getElementById('no-surat').value=''; document.getElementById('asal-surat').value=''; document.getElementById('perihal-surat').value=''; document.getElementById('foto-surat').value=''; document.getElementById('btn-batal-surat').classList.add('hidden'); document.getElementById('title-form-surat').textContent="Arsip Surat"; };
+        // Surat
+        const resetSurat=()=>{document.getElementById('edit-id-surat').value=''; document.getElementById('no-surat').value=''; document.getElementById('asal-surat').value=''; document.getElementById('perihal-surat').value=''; document.getElementById('foto-surat').value=''; document.getElementById('btn-batal-surat').classList.add('hidden'); document.getElementById('title-form-surat').textContent="Arsip Surat";};
         document.getElementById('btn-batal-surat').addEventListener('click', resetSurat);
-        document.getElementById('btn-simpan-surat').addEventListener('click', async () => {
+        document.getElementById('btn-simpan-surat').addEventListener('click', async()=>{
             const id=document.getElementById('edit-id-surat').value, t=document.getElementById('tgl-surat').value, j=document.getElementById('jenis-surat').value, n=document.getElementById('no-surat').value, a=document.getElementById('asal-surat').value, p=document.getElementById('perihal-surat').value, f=document.getElementById('foto-surat').files[0];
-            if(!t||!n||!p) return showAlert("Lengkapi form surat!",false);
-            const btn=document.getElementById('btn-simpan-surat'); btn.disabled=true; btn.textContent="Loading...";
-            try { let url=""; if(f) url = await uploadToImgBB(f);
-                const dt = {tanggal:t, jenis:j, nomor_surat:n, asal_tujuan:a, perihal:p}; if(url) dt.fotoUrl=url;
-                if(id) await updateDoc(doc(db,"surat",id), dt); else { dt.timestamp=serverTimestamp(); await addDoc(collection(db,"surat"), dt); }
-                resetSurat(); loadSurat(); showAlert("Tersimpan!");
-            } catch(e) { showAlert("Gagal",false); } btn.disabled=false; btn.textContent="Simpan";
+            if(!t||!n||!p) return showAlert("Lengkapi surat!",false); const btn=document.getElementById('btn-simpan-surat'); btn.disabled=true; btn.textContent="Loading...";
+            try { let url=""; if(f) url=await uploadToImgBB(f); const dt={tanggal:t, jenis:j, nomor_surat:n, asal_tujuan:a, perihal:p}; if(url) dt.fotoUrl=url;
+                if(id) await updateDoc(doc(db,"surat",id), dt); else {dt.timestamp=serverTimestamp(); await addDoc(collection(db,"surat"), dt);}
+                resetSurat(); loadSurat(); showAlert("Tersimpan!"); }catch(e){showAlert("Gagal",false);} btn.disabled=false; btn.textContent="Simpan";
         });
-        async function loadSurat() {
-            const snap = await getDocs(query(collection(db, "surat"), orderBy("tanggal", "desc")));
-            state.surat.data = []; snap.forEach(d => state.surat.data.push({id: d.id, ...d.data()})); renderSurat();
-        }
-        setupSearch('search-surat', 'surat', () => renderSurat());
-        window.renderSurat = () => {
-            const tbody = document.getElementById('tabel-surat'); tbody.innerHTML = '';
-            const list = renderPagination('surat', 'pagination-surat', renderSurat);
-            if(list.length===0) return tbody.innerHTML = '<tr><td colspan="5" class="p-3 text-center">Data kosong.</td></tr>';
-            list.forEach(d => {
-                const bdg = d.jenis==='Masuk'?'bg-blue-100 text-blue-700':'bg-yellow-100 text-yellow-700';
-                const lmp = d.fotoUrl ? `<a href="${d.fotoUrl}" target="_blank" class="text-xs bg-gray-200 px-2 py-1 rounded font-bold">Lihat Foto</a>` : '-';
-                tbody.innerHTML += `<tr class="border-b hover:bg-gray-50"><td class="p-3 text-sm">${d.tanggal}</td><td class="p-3"><span class="px-2 py-1 rounded text-xs font-bold ${bdg}">${d.jenis}</span></td><td class="p-3"><div class="font-bold text-sm">${d.nomor_surat}</div><div class="text-xs text-gray-500">${d.perihal} (Dari/Ke: ${d.asal_tujuan})</div></td><td class="p-3 text-center">${lmp}</td><td class="p-3 text-center"><button onclick="window.edSurat('${d.id}','${d.tanggal}','${d.jenis}','${d.nomor_surat}','${d.asal_tujuan}','${d.perihal}')" class="text-xs text-blue-500 mr-2">Edit</button><button onclick="window.hpSurat('${d.id}')" class="text-xs text-red-500">Hps</button></td></tr>`;
-            });
+        async function loadSurat(){const snap=await getDocs(query(collection(db,"surat"), orderBy("tanggal","desc"))); state.surat.data=[]; snap.forEach(d=>state.surat.data.push({id:d.id, ...d.data()})); renderSurat();}
+        setupSearch('search-surat','surat',()=>renderSurat());
+        window.renderSurat=()=>{
+            const tbody=document.getElementById('tabel-surat'); tbody.innerHTML=''; const list=renderPagination('surat','pagination-surat',renderSurat);
+            if(list.length===0) return tbody.innerHTML='<tr><td colspan="5" class="p-3 text-center">Data kosong.</td></tr>';
+            list.forEach(d=>{const bdg=d.jenis==='Masuk'?'bg-blue-100 text-blue-700':'bg-yellow-100 text-yellow-700'; const lmp=d.fotoUrl?`<a href="${d.fotoUrl}" target="_blank" class="text-xs bg-gray-200 px-2 py-1 rounded font-bold">Foto</a>`:'-'; tbody.innerHTML+=`<tr class="border-b hover:bg-gray-50"><td class="p-3 text-sm">${d.tanggal}</td><td class="p-3"><span class="px-2 py-1 rounded text-xs font-bold ${bdg}">${d.jenis}</span></td><td class="p-3"><div class="font-bold text-sm">${d.nomor_surat}</div><div class="text-xs text-gray-500">${d.perihal} (D/K: ${d.asal_tujuan})</div></td><td class="p-3 text-center">${lmp}</td><td class="p-3 text-center"><button onclick="window.edSurat('${d.id}','${d.tanggal}','${d.jenis}','${d.nomor_surat}','${d.asal_tujuan}','${d.perihal}')" class="text-xs text-blue-500 mr-2">Edit</button><button onclick="window.hpSurat('${d.id}')" class="text-xs text-red-500">Hps</button></td></tr>`;});
         };
-        window.edSurat=(id,t,j,n,a,p)=>{document.getElementById('edit-id-surat').value=id; document.getElementById('tgl-surat').value=t; document.getElementById('jenis-surat').value=j; document.getElementById('no-surat').value=n; document.getElementById('asal-surat').value=a; document.getElementById('perihal-surat').value=p; document.getElementById('btn-batal-surat').classList.remove('hidden'); document.getElementById('title-form-surat').textContent="Edit Surat"; window.scrollTo({top:0});};
-        window.hpSurat=async(id)=>{if(confirm("Hapus?")){await deleteDoc(doc(db,"surat",id)); loadSurat();}};
+        window.edSurat=(id,t,j,n,a,p)=>{document.getElementById('edit-id-surat').value=id;document.getElementById('tgl-surat').value=t;document.getElementById('jenis-surat').value=j;document.getElementById('no-surat').value=n;document.getElementById('asal-surat').value=a;document.getElementById('perihal-surat').value=p;document.getElementById('btn-batal-surat').classList.remove('hidden');document.getElementById('title-form-surat').textContent="Edit Surat";window.scrollTo({top:0});};
+        window.hpSurat=async(id)=>{if(confirm("Hapus?")){await deleteDoc(doc(db,"surat",id));loadSurat();}};
 
+        // Users
+        async function loadUsers(){if(currentUserRole!=='admin_cabang')return; const snap=await getDocs(query(collection(db,"users"), orderBy("tanggal_daftar","desc"))); state.users.data=[]; snap.forEach(d=>state.users.data.push({id:d.id, ...d.data()})); renderUsers();}
+        setupSearch('search-users','users',()=>renderUsers());
+        window.renderUsers=()=>{
+            const tbody=document.getElementById('tabel-users'); tbody.innerHTML=''; const list=renderPagination('users','pagination-users',renderUsers);
+            if(list.length===0) return tbody.innerHTML='<tr><td colspan="4" class="p-3 text-center">Tidak ditemukan.</td></tr>';
+            list.forEach(d=>{const bdg=d.role.includes('admin')?'bg-red-100 text-red-700':(d.role==='pelatih'?'bg-blue-100 text-blue-700':'bg-gray-100 text-gray-700'); tbody.innerHTML+=`<tr class="border-b hover:bg-gray-50"><td class="p-3 font-bold">${d.nama}</td><td class="p-3 text-sm">${d.email}</td><td class="p-3"><span class="px-2 py-1 rounded text-xs font-bold ${bdg}">${d.role}</span></td><td class="p-3 text-center"><select onchange="window.ubahRole('${d.id}', this.value)" class="p-1 border rounded text-xs font-bold"><option value="" disabled selected>Ubah...</option><option value="user">User Biasa</option><option value="pelatih">Pelatih</option><option value="admin_ranting">Admin Ranting</option><option value="admin_cabang">Admin Cabang</option></select></td></tr>`;});
+        };
+        window.ubahRole=async(id,rl)=>{if(confirm(`Ubah jadi ${rl}?`)){await updateDoc(doc(db,"users",id),{role:rl});showAlert("Diperbarui!");loadUsers();}};
+
+        // Profil
+        async function loadProfil(){if(!currentUser)return; document.getElementById('profil-foto').src=currentUser.photoURL||'https://via.placeholder.com/100'; document.getElementById('profil-email').value=currentUser.email; const snap=await getDoc(doc(db,'users',currentUser.uid)); document.getElementById('profil-nama').value=(snap.exists()&&snap.data().nama)?snap.data().nama:currentUser.displayName;}
+        document.getElementById('btn-update-profil').addEventListener('click', async()=>{const n=document.getElementById('profil-nama').value; if(!n)return showAlert("Kosong",false); try{await updateProfile(auth.currentUser,{displayName:n}); await updateDoc(doc(db,'users',currentUser.uid),{nama:n}); document.getElementById('welcome-text').textContent=`Halo, ${n.split(' ')[0]} (${currentUserRole})`; showAlert("Profil Diperbarui!");}catch(e){showAlert("Gagal",false);}});
+
+        // Inisialisasi awal publik (Load Berita & Jadwal)
+        fetchBerita(); loadJadwalPublik();
     </script>
 </body>
 </html>
