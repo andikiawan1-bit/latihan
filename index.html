@@ -368,7 +368,7 @@
             const totalPages = Math.ceil(filtered.length / st.limit) || 1; if(st.page > totalPages) st.page = totalPages;
             const cont = document.getElementById(containerId);
             if(cont) {
-                cont.innerHTML = `<span class="text-sm text-gray-500">Hal ${st.page} / ${totalPages} \vert{} Total:${filtered.length}</span><div class="flex gap-1"><button id="prev-${modul}" class="px-3 py-1 bg-gray-200 rounded text-sm font-bold disabled:opacity-50">Prev</button><button id="next-${modul}" class="px-3 py-1 bg-gray-200 rounded text-sm font-bold disabled:opacity-50">Next</button></div>`;
+                cont.innerHTML = `<span class="text-sm text-gray-500">Hal ${st.page} / ${totalPages} | Total: ${filtered.length}</span><div class="flex gap-1"><button id="prev-${modul}" class="px-3 py-1 bg-gray-200 rounded text-sm font-bold disabled:opacity-50">Prev</button><button id="next-${modul}" class="px-3 py-1 bg-gray-200 rounded text-sm font-bold disabled:opacity-50">Next</button></div>`;
                 document.getElementById(`prev-${modul}`).disabled = st.page === 1; document.getElementById(`next-${modul}`).disabled = st.page === totalPages;
                 document.getElementById(`prev-${modul}`).onclick = () => { st.page--; renderFunc(); }; document.getElementById(`next-${modul}`).onclick = () => { st.page++; renderFunc(); };
             }
@@ -398,7 +398,7 @@
                     currentUserData = { role: d.role||'user', ranting: d.ranting||'', akses_menu: d.akses_menu||[], nama: d.nama||user.displayName, siswa_id: d.siswa_id||'' };
                 }
 
-                document.getElementById('welcome-text').textContent = `Halo, ${currentUserData.nama.split(' ')[0]} (${currentUserData.role.replace('_',' ')})${currentUserData.ranting ? '| '+currentUserData.ranting : ''}`;
+                document.getElementById('welcome-text').textContent = `Halo, ${currentUserData.nama.split(' ')[0]} (${currentUserData.role.replace('_',' ')}) ${currentUserData.ranting ? '| '+currentUserData.ranting : ''}`;
                 document.getElementById('welcome-text').classList.remove('hidden');
 
                 // Konfigurasi Navigasi Menu berdasar Hak Akses
@@ -518,4 +518,125 @@
         window.renderSiswa=()=>{
             const tbody=document.getElementById('tabel-siswa'); tbody.innerHTML=''; const list=renderPagination('siswa','pagination-siswa',renderSiswa);
             if(list.length===0) return tbody.innerHTML='<tr><td colspan="4" class="p-3 text-center">Data kosong.</td></tr>';
-            list.forEach(d=>{tbody.innerHTML+=`<tr class="border-b
+            list.forEach(d=>{tbody.innerHTML+=`<tr class="border-b hover:bg-gray-50"><td class="p-3 font-bold">${d.nama}</td><td class="p-3">${d.sabuk}</td><td class="p-3">${d.ranting}</td><td class="p-3 text-center"><button onclick="window.edSiswa('${d.id}','${d.nama}','${d.sabuk}','${d.ranting}')" class="text-xs text-blue-500 mr-2">Edit</button><button onclick="window.hpSiswa('${d.id}')" class="text-xs text-red-500">Hps</button></td></tr>`;});
+        };
+        window.edSiswa=(id,n,s,r)=>{document.getElementById('edit-id-siswa').value=id; document.getElementById('nama-siswa').value=n; document.getElementById('sabuk-siswa').value=s; document.getElementById('ranting-siswa').value=r; document.getElementById('btn-batal-siswa').classList.remove('hidden'); window.scrollTo({top:0});};
+        window.hpSiswa=async(id)=>{if(confirm("Hapus?")){await deleteDoc(doc(db,"siswa",id));loadSiswa();}};
+        document.getElementById('btn-export-siswa').addEventListener('click',()=>{let csv="Nama,Tingkatan,Ranting\n"; state.siswa.data.forEach(s=>{csv+=`"${s.nama}","${s.sabuk}","${s.ranting}"\n`;}); downloadCSV(csv,'Siswa.csv');});
+
+        // ================== ABSENSI ==================
+        document.getElementById('tanggal-absen').valueAsDate=new Date();
+        const resetAbsen=()=>{document.getElementById('edit-id-absen').value=''; document.getElementById('materi-latihan').value=''; document.getElementById('foto-latihan').value=''; document.getElementById('btn-batal-absen').classList.add('hidden'); setupFormRantingLock(); loadFormAbsensi();};
+        document.getElementById('btn-batal-absen').addEventListener('click', resetAbsen);
+        document.getElementById('search-absen-input').addEventListener('input', (e) => loadFormAbsensi(null, e.target.value));
+        async function loadFormAbsensi(exData=null, filter=''){
+            const tbody=document.getElementById('tabel-absensi'); tbody.innerHTML=''; let list=state.siswa.data;
+            if(filter) list=list.filter(s=>s.nama.toLowerCase().includes(filter.toLowerCase()));
+            list.forEach(s=>{let st='Hadir'; if(exData){const f=exData.find(k=>k.siswa_id===s.id);if(f)st=f.status;}
+                tbody.innerHTML+=`<tr class="border-b"><td class="p-2 w-1/3"><div class="font-bold text-sm">${s.nama}</div><div class="text-xs text-gray-500">${s.sabuk}</div></td><td class="p-2 w-2/3"><div class="flex gap-1 text-xs font-bold"><label class="cursor-pointer flex-1 text-center"><input type="radio" name="abs_${s.id}" value="Hadir" ${st==='Hadir'?'checked':''} class="peer sr-only"><div class="p-1 border rounded peer-checked:bg-green-500 peer-checked:text-white">Hadir</div></label><label class="cursor-pointer flex-1 text-center"><input type="radio" name="abs_${s.id}" value="Sakit" ${st==='Sakit'?'checked':''} class="peer sr-only"><div class="p-1 border rounded peer-checked:bg-yellow-400 peer-checked:text-white">Sakit</div></label><label class="cursor-pointer flex-1 text-center"><input type="radio" name="abs_${s.id}" value="Izin" ${st==='Izin'?'checked':''} class="peer sr-only"><div class="p-1 border rounded peer-checked:bg-blue-400 peer-checked:text-white">Izin</div></label><label class="cursor-pointer flex-1 text-center"><input type="radio" name="abs_${s.id}" value="Alpha" ${st==='Alpha'?'checked':''} class="peer sr-only"><div class="p-1 border rounded peer-checked:bg-red-500 peer-checked:text-white">Alpha</div></label></div></td></tr>`;
+            });
+        }
+        document.getElementById('btn-simpan-absen').addEventListener('click', async()=>{
+            const id=document.getElementById('edit-id-absen').value, r=document.getElementById('ranting-absen').value, t=document.getElementById('tanggal-absen').value, m=document.getElementById('materi-latihan').value, f=document.getElementById('foto-latihan').files[0];
+            if(!t||!r) return showAlert("Lengkapi form!",false); let rek=[]; state.siswa.data.forEach(s=>{const o=document.querySelector(`input[name="abs_${s.id}"]:checked`); rek.push({siswa_id:s.id, nama:s.nama, status:o?o.value:"Alpha"});});
+            const btn=document.getElementById('btn-simpan-absen'); btn.disabled=true; btn.textContent="Loading...";
+            try { let url=""; if(f) url=await uploadToImgBB(f); const dt={ranting:r, tanggal:t, materi:m, pencatat:currentUserData.nama, data_kehadiran:rek}; if(url) dt.fotoUrl=url;
+                if(id) await updateDoc(doc(db,"absensi",id), dt); else {dt.timestamp=serverTimestamp(); await addDoc(collection(db,"absensi"),dt);}
+                resetAbsen(); loadRiwayatAbsensi(); showAlert("Disimpan!"); }catch(e){showAlert("Gagal",false);} btn.disabled=false; btn.textContent="Simpan";
+        });
+        async function loadRiwayatAbsensi(){const snap=await getDocs(query(collection(db,"absensi"), orderBy("tanggal","desc"))); state.absenRiwayat.data=[]; snap.forEach(d=>{ const dt=d.data(); if(checkIsolasi(dt.ranting)) state.absenRiwayat.data.push({id:d.id, ...dt}); }); renderRiwayatAbsensi();}
+        setupSearch('search-riwayat-absen','absenRiwayat',()=>renderRiwayatAbsensi());
+        window.renderRiwayatAbsensi=()=>{
+            const cont=document.getElementById('riwayat-absensi-container'); cont.innerHTML=''; const list=renderPagination('absenRiwayat','pagination-riwayat-absen',renderRiwayatAbsensi);
+            list.forEach(d=>{let h=0,s=0,i=0,a=0; d.data_kehadiran.forEach(k=>{if(k.status==='Hadir')h++;else if(k.status==='Sakit')s++;else if(k.status==='Izin')i++;else a++;});
+                cont.innerHTML+=`<div class="bg-white border rounded-xl p-4 shadow-sm"><div class="flex justify-between font-bold mb-1"><span class="text-green-700">📅 ${d.tanggal}</span><div><button onclick="window.edAbsen('${d.id}')" class="text-xs text-blue-500 mr-2">Edit</button><button onclick="window.hpAbsen('${d.id}')" class="text-xs text-red-500">Hps</button></div></div><div class="text-xs text-gray-500 mb-2">${d.ranting} | Oleh: ${d.pencatat}</div><div class="text-xs bg-gray-50 p-2 rounded mb-2 border truncate">${d.materi||'-'}</div><div class="flex gap-1 text-xs font-bold text-center"><div class="flex-1 bg-green-100 text-green-700 p-1">H:${h}</div><div class="flex-1 bg-yellow-100 text-yellow-700 p-1">S:${s}</div><div class="flex-1 bg-blue-100 text-blue-700 p-1">I:${i}</div><div class="flex-1 bg-red-100 text-red-700 p-1">A:${a}</div></div>${d.fotoUrl?`<img src="${d.fotoUrl}" class="mt-2 h-20 object-cover w-full rounded">`:''}</div>`;
+            });
+        };
+        window.edAbsen=async(id)=>{const d=await getDoc(doc(db,"absensi",id));if(d.exists()){const t=d.data(); document.getElementById('edit-id-absen').value=id; document.getElementById('ranting-absen').value=t.ranting; document.getElementById('tanggal-absen').value=t.tanggal; document.getElementById('materi-latihan').value=t.materi||''; document.getElementById('btn-batal-absen').classList.remove('hidden'); loadFormAbsensi(t.data_kehadiran); window.scrollTo({top:0});}};
+        window.hpAbsen=async(id)=>{if(confirm("Hapus?")){await deleteDoc(doc(db,"absensi",id));loadRiwayatAbsensi();}};
+
+        // ================== KEUANGAN ==================
+        const resetKas=()=>{document.getElementById('edit-id-keuangan').value=''; document.getElementById('nominal-kas').value=''; document.getElementById('ket-kas').value=''; document.getElementById('link-kas').value=''; document.getElementById('btn-batal-keuangan').classList.add('hidden'); setupFormRantingLock();};
+        document.getElementById('btn-batal-keuangan').addEventListener('click', resetKas);
+        document.getElementById('btn-simpan-keuangan').addEventListener('click', async()=>{
+            const id=document.getElementById('edit-id-keuangan').value, r=document.getElementById('ranting-kas').value, t=document.getElementById('tgl-kas').value, j=document.getElementById('jenis-kas').value, n=parseInt(document.getElementById('nominal-kas').value), k=document.getElementById('ket-kas').value, l=document.getElementById('link-kas').value;
+            if(!t||!n||!k||!r) return showAlert("Isi form kas!",false); const dt={ranting:r, tanggal:t, jenis:j, nominal:n, keterangan:k, link:l, pencatat:currentUserData.nama};
+            if(id) await updateDoc(doc(db,"keuangan",id), dt); else {dt.timestamp=serverTimestamp(); await addDoc(collection(db,"keuangan"), dt);}
+            resetKas(); loadKeuangan(); showAlert("Tersimpan!");
+        });
+        async function loadKeuangan(){const snap=await getDocs(query(collection(db,"keuangan"), orderBy("tanggal","desc"))); state.keuangan.data=[]; let saldo=0; snap.forEach(d=>{const dt=d.data(); if(checkIsolasi(dt.ranting)) {state.keuangan.data.push({id:d.id, ...dt}); if(dt.jenis==='Masuk') saldo+=dt.nominal; else saldo-=dt.nominal;}}); document.getElementById('total-saldo').textContent=`Rp ${saldo.toLocaleString('id-ID')}`; renderKeuangan();}
+        setupSearch('search-kas','keuangan',()=>renderKeuangan());
+        window.renderKeuangan=()=>{
+            const tbody=document.getElementById('tabel-keuangan'); tbody.innerHTML=''; const list=renderPagination('keuangan','pagination-keuangan',renderKeuangan);
+            if(list.length===0) return tbody.innerHTML='<tr><td colspan="7" class="p-3 text-center">Data kosong.</td></tr>';
+            list.forEach(d=>{const bkti=d.link?`<a href="${d.link}" target="_blank" class="text-xs bg-indigo-100 text-indigo-700 px-2 py-1 rounded font-bold">Lihat</a>`:'-'; tbody.innerHTML+=`<tr class="border-b font-semibold hover:bg-gray-50"><td class="p-3 text-xs">${d.ranting}</td><td class="p-3 text-sm">${d.tanggal}</td><td class="p-3 text-sm">${d.keterangan}</td><td class="p-3 text-right text-green-600">${d.jenis==='Masuk'?d.nominal.toLocaleString('id-ID'):'-'}</td><td class="p-3 text-right text-red-600">${d.jenis==='Keluar'?d.nominal.toLocaleString('id-ID'):'-'}</td><td class="p-3 text-center">${bkti}</td><td class="p-3 text-center"><button onclick="window.edKas('${d.id}','${d.ranting}','${d.tanggal}','${d.jenis}',${d.nominal},'${d.keterangan}','${d.link||''}')" class="text-xs text-blue-500 mr-2">Edit</button><button onclick="window.hpKas('${d.id}')" class="text-xs text-red-500">Hps</button></td></tr>`;});
+        };
+        window.edKas=(id,r,t,j,n,k,l)=>{document.getElementById('edit-id-keuangan').value=id;document.getElementById('ranting-kas').value=r;document.getElementById('tgl-kas').value=t;document.getElementById('jenis-kas').value=j;document.getElementById('nominal-kas').value=n;document.getElementById('ket-kas').value=k;document.getElementById('link-kas').value=l;document.getElementById('btn-batal-keuangan').classList.remove('hidden');window.scrollTo({top:0});};
+        window.hpKas=async(id)=>{if(confirm("Hapus?")){await deleteDoc(doc(db,"keuangan",id));loadKeuangan();}};
+
+        // ================== SURAT ==================
+        const resetSurat=()=>{document.getElementById('edit-id-surat').value=''; document.getElementById('no-surat').value=''; document.getElementById('asal-surat').value=''; document.getElementById('perihal-surat').value=''; document.getElementById('link-surat').value=''; document.getElementById('btn-batal-surat').classList.add('hidden'); setupFormRantingLock();};
+        document.getElementById('btn-batal-surat').addEventListener('click', resetSurat);
+        document.getElementById('btn-simpan-surat').addEventListener('click', async()=>{
+            const id=document.getElementById('edit-id-surat').value, r=document.getElementById('ranting-surat').value, t=document.getElementById('tgl-surat').value, j=document.getElementById('jenis-surat').value, n=document.getElementById('no-surat').value, a=document.getElementById('asal-surat').value, p=document.getElementById('perihal-surat').value, l=document.getElementById('link-surat').value;
+            if(!t||!n||!p||!r) return showAlert("Lengkapi surat!",false); 
+            const dt={ranting:r, tanggal:t, jenis:j, nomor_surat:n, asal_tujuan:a, perihal:p, link_surat:l, timestamp:serverTimestamp()};
+            try { if(id) await updateDoc(doc(db,"surat",id), dt); else await addDoc(collection(db,"surat"), dt); resetSurat(); loadSurat(); showAlert("Surat Tersimpan!"); }catch(e){showAlert("Gagal",false);} 
+        });
+        async function loadSurat(){const snap=await getDocs(query(collection(db,"surat"), orderBy("tanggal","desc"))); state.surat.data=[]; snap.forEach(d=>{ const dt=d.data(); if(checkIsolasi(dt.ranting)) state.surat.data.push({id:d.id, ...dt}); }); renderSurat();}
+        setupSearch('search-surat','surat',()=>renderSurat());
+        window.renderSurat=()=>{
+            const tbody=document.getElementById('tabel-surat'); tbody.innerHTML=''; const list=renderPagination('surat','pagination-surat',renderSurat);
+            if(list.length===0) return tbody.innerHTML='<tr><td colspan="6" class="p-3 text-center">Data kosong.</td></tr>';
+            list.forEach(d=>{const bdg=d.jenis==='Masuk'?'bg-blue-100 text-blue-700':'bg-yellow-100 text-yellow-700'; const lmp=d.link_surat?`<a href="${d.link_surat}" target="_blank" class="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded font-bold">Buka</a>`:'-'; tbody.innerHTML+=`<tr class="border-b hover:bg-gray-50"><td class="p-3 text-xs">${d.ranting}</td><td class="p-3 text-sm">${d.tanggal}</td><td class="p-3"><span class="px-2 py-1 rounded text-xs font-bold ${bdg}">${d.jenis}</span></td><td class="p-3"><div class="font-bold text-sm">${d.nomor_surat}</div><div class="text-xs text-gray-500">${d.perihal} (D/K: ${d.asal_tujuan})</div></td><td class="p-3 text-center">${lmp}</td><td class="p-3 text-center"><button onclick="window.edSurat('${d.id}','${d.ranting}','${d.tanggal}','${d.jenis}','${d.nomor_surat}','${d.asal_tujuan}','${d.perihal}','${d.link_surat||''}')" class="text-xs text-blue-500 mr-2">Edit</button><button onclick="window.hpSurat('${d.id}')" class="text-xs text-red-500">Hps</button></td></tr>`;});
+        };
+        window.edSurat=(id,r,t,j,n,a,p,l)=>{document.getElementById('edit-id-surat').value=id;document.getElementById('ranting-surat').value=r;document.getElementById('tgl-surat').value=t;document.getElementById('jenis-surat').value=j;document.getElementById('no-surat').value=n;document.getElementById('asal-surat').value=a;document.getElementById('perihal-surat').value=p;document.getElementById('link-surat').value=l;document.getElementById('btn-batal-surat').classList.remove('hidden');window.scrollTo({top:0});};
+        window.hpSurat=async(id)=>{if(confirm("Hapus surat?")){await deleteDoc(doc(db,"surat",id));loadSurat();}};
+
+        // ================== JADWAL, BERITA & PROFIL ==================
+        // Kode untuk modul ini sama dengan sebelumnya...
+        const resetJadwal=()=>{document.getElementById('edit-id-jadwal').value='';document.getElementById('nama-ranting').value='';document.getElementById('hari-latihan').value='';document.getElementById('jam-latihan').value='';document.getElementById('alamat-latihan').value='';document.getElementById('link-maps').value='';document.getElementById('btn-batal-jadwal').classList.add('hidden');};
+        document.getElementById('btn-batal-jadwal').addEventListener('click', resetJadwal);
+        document.getElementById('btn-simpan-jadwal').addEventListener('click', async () => {
+            const id=document.getElementById('edit-id-jadwal').value, r=document.getElementById('nama-ranting').value, h=document.getElementById('hari-latihan').value, j=document.getElementById('jam-latihan').value, a=document.getElementById('alamat-latihan').value, l=document.getElementById('link-maps').value;
+            if(!r||!h||!j) return showAlert("Lengkapi jadwal!",false); const dt = {ranting:r, hari:h, jam:j, alamat:a, link_maps:l, timestamp:serverTimestamp()};
+            if(id) await updateDoc(doc(db,"jadwal_latihan",id), dt); else await addDoc(collection(db,"jadwal_latihan"), dt); showAlert("Tersimpan!"); resetJadwal(); loadJadwalAdmin();
+        });
+        async function loadJadwalAdmin(){const snap=await getDocs(query(collection(db,"jadwal_latihan"),orderBy("timestamp","desc"))); state.jadwal.data=[]; snap.forEach(d=>state.jadwal.data.push({id:d.id, ...d.data()})); const tbody=document.getElementById('tabel-jadwal'); tbody.innerHTML=''; if(state.jadwal.data.length===0) return tbody.innerHTML='<tr><td colspan="4" class="p-3 text-center">Kosong.</td></tr>'; state.jadwal.data.forEach(d=>{const maps=d.link_maps?`<br><a href="${d.link_maps}" target="_blank" class="text-xs text-blue-600 underline">Buka Maps</a>`:''; tbody.innerHTML+=`<tr class="border-b hover:bg-gray-50"><td class="p-3 font-bold">${d.ranting}</td><td class="p-3 text-sm">${d.hari} - ${d.jam}</td><td class="p-3 text-sm">${d.alamat} ${maps}</td><td class="p-3 text-center"><button onclick="window.edJadwal('${d.id}')" class="text-xs text-blue-500 mr-2">Edit</button><button onclick="window.hpJadwal('${d.id}')" class="text-xs text-red-500">Hps</button></td></tr>`;});}
+        window.edJadwal=async(id)=>{const d=await getDoc(doc(db,"jadwal_latihan",id)); if(d.exists()){ const t=d.data(); document.getElementById('edit-id-jadwal').value=id; document.getElementById('nama-ranting').value=t.ranting; document.getElementById('hari-latihan').value=t.hari; document.getElementById('jam-latihan').value=t.jam; document.getElementById('alamat-latihan').value=t.alamat; document.getElementById('link-maps').value=t.link_maps||''; document.getElementById('btn-batal-jadwal').classList.remove('hidden'); window.scrollTo({top:0}); }};
+        window.hpJadwal=async(id)=>{if(confirm("Hapus?")){await deleteDoc(doc(db,"jadwal_latihan",id));loadJadwalAdmin();}};
+        async function loadJadwalPublik(){const cont=document.getElementById('jadwal-publik-container'); const snap=await getDocs(query(collection(db,"jadwal_latihan"),orderBy("timestamp","asc"))); cont.innerHTML=snap.empty?'<p class="text-gray-500 italic px-4">Jadwal belum tersedia.</p>':''; snap.forEach(d=>{const t=d.data(); const btnMaps=t.link_maps?`<a href="${t.link_maps}" target="_blank" class="block text-center mt-3 bg-blue-50 text-blue-700 p-2 rounded font-bold border border-blue-200">🗺️ Buka Peta</a>`:''; cont.innerHTML+=`<div class="bg-white p-5 rounded-xl shadow border border-t-4 border-t-blue-500"><h3 class="font-bold text-lg mb-2">${t.ranting}</h3><p class="text-sm">📅 ${t.hari}</p><p class="text-sm">⏰ ${t.jam}</p><p class="text-sm mt-2 border-t pt-2">📍 ${t.alamat}</p>${btnMaps}</div>`;}); document.getElementById('jadwal-publik').classList.remove('hidden');}
+
+        const resetBerita=()=>{document.getElementById('edit-id-berita').value=''; document.getElementById('judul-berita').value=''; document.getElementById('tag-berita').value=''; document.getElementById('foto-berita').value=''; quill.setContents([]); document.getElementById('btn-batal-berita').classList.add('hidden');};
+        document.getElementById('btn-batal-berita').addEventListener('click', resetBerita);
+        document.getElementById('btn-simpan-berita').addEventListener('click', async()=>{
+            const id=document.getElementById('edit-id-berita').value, jud=document.getElementById('judul-berita').value, isi=quill.root.innerHTML, file=document.getElementById('foto-berita').files[0];
+            if(!jud||quill.getText().trim().length===0) return showAlert("Isi berita!",false); const btn=document.getElementById('btn-simpan-berita'); btn.disabled=true; btn.textContent="Loading...";
+            try { let url=""; if(file) url=await uploadToImgBB(file); const dt={judul:jud, tag:document.getElementById('tag-berita').value, isi, status:document.getElementById('status-berita').value, penulis:currentUserData.nama, tanggal:new Date().toLocaleDateString('id-ID')}; if(url) dt.fotoUrl=url;
+                if(id){ dt.diperbarui=serverTimestamp(); await updateDoc(doc(db,"berita",id),dt); }else{ dt.timestamp=serverTimestamp(); await addDoc(collection(db,"berita"),dt); }
+                resetBerita(); fetchBerita(); showAlert("Tersimpan!"); }catch(e){showAlert("Gagal",false);} btn.disabled=false; btn.textContent="Simpan";
+        });
+        async function fetchBerita(){ const snap=await getDocs(query(collection(db,"berita"), orderBy("timestamp","desc"))); state.berita.data=[]; snap.forEach(d=>state.berita.data.push({id:d.id, ...d.data()})); renderBerita(); }
+        setupSearch('search-berita','berita',()=>renderBerita());
+        window.renderBerita=()=>{
+            const cont=document.getElementById('berita-container'); cont.innerHTML=''; const list=renderPagination('berita','pagination-berita',renderBerita);
+            if(list.length===0) return cont.innerHTML='<p class="text-gray-500 italic">Tidak ada berita.</p>';
+            list.forEach(d=>{
+                const hasAkses = ['super_admin','admin_cabang'].includes(currentUserData.role) || currentUserData.akses_menu.includes('berita');
+                if(d.status==='draft' && !hasAkses) return;
+                const draft=d.status==='draft'?`<span class="bg-yellow-500 text-white text-xs px-1 rounded">DRAFT</span>`:'';
+                const btnEdit=hasAkses?`<div class="mt-2 border-t pt-2"><button onclick="window.editBerita('${d.id}')" class="text-xs text-blue-600 mr-2">Edit</button><button onclick="window.hpsBerita('${d.id}')" class="text-xs text-red-600">Hapus</button></div>`:'';
+                cont.innerHTML+=`<div class="bg-white border rounded-xl shadow-sm p-4 flex flex-col justify-between"><div>${d.fotoUrl?`<img src="${d.fotoUrl}" class="w-full h-32 object-cover mb-2 rounded">`:''}<h3 class="font-bold text-lg">${d.judul} ${draft}</h3><p class="text-xs text-gray-500 mb-2">${d.tanggal} | ${d.penulis}</p><div class="text-sm prose line-clamp-3">${d.isi}</div></div> ${btnEdit}</div>`;
+            });
+        };
+        window.editBerita=async(id)=>{const d=await getDoc(doc(db,"berita",id));if(d.exists()){const t=d.data();document.getElementById('edit-id-berita').value=id;document.getElementById('judul-berita').value=t.judul;document.getElementById('tag-berita').value=t.tag;document.getElementById('status-berita').value=t.status;quill.root.innerHTML=t.isi;document.getElementById('btn-batal-berita').classList.remove('hidden');window.scrollTo({top:0});}};
+        window.hpsBerita=async(id)=>{if(confirm("Hapus?")){await deleteDoc(doc(db,"berita",id));fetchBerita();}};
+
+        async function loadProfil(){if(!currentUser)return; document.getElementById('profil-foto').src=currentUser.photoURL||'https://via.placeholder.com/100'; document.getElementById('profil-email').value=currentUser.email; document.getElementById('profil-nama').value=currentUserData.nama;}
+        document.getElementById('btn-update-profil').addEventListener('click', async()=>{const n=document.getElementById('profil-nama').value; if(!n)return showAlert("Kosong",false); try{await updateProfile(auth.currentUser,{displayName:n}); await updateDoc(doc(db,'users',currentUser.uid),{nama:n}); currentUserData.nama = n; document.getElementById('welcome-text').textContent=`Halo, ${n.split(' ')[0]}`; showAlert("Profil Diperbarui!");}catch(e){showAlert("Gagal",false);}});
+
+        // Inisialisasi awal
+        fetchBerita(); loadJadwalPublik();
+    </script>
+</body>
+</html>
