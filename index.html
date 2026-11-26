@@ -302,21 +302,7 @@
         import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut, updateProfile } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, collection, addDoc, getDocs, updateDoc, doc, getDoc, setDoc, deleteDoc, serverTimestamp, query, orderBy, where } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        // ==========================================
-        // 1. MASUKKAN API KEY IMGBB DI SINI
-        // ==========================================
-        const IMGBB_API_KEY = "ecee7bbedc9bf7d2541dfb76f8e8087d";
-
-        // ==========================================
-        // 2. MASUKKAN FIREBASE CONFIG DI SINI
-        // ==========================================
-        const firebaseConfig = {
-            apiKey: "AIzaSyC7vHRm7AhY8fNdvClgDOCl4jevVFMAujY",
-            authDomain: "perisai-diri-cabang-bojonegoro.firebaseapp.com",
-            projectId: "perisai-diri-cabang-bojonegoro",
-            messagingSenderId: "66914647335",
-            appId: "1:66914647335:web:fba82b00a83a52b9bcfd02"
-        };
+        import { IMGBB_API_KEY, firebaseConfig } from "./config.js";
 
         const app = initializeApp(firebaseConfig); const auth = getAuth(app); const db = getFirestore(app); const provider = new GoogleAuthProvider();
 
